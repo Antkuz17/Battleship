@@ -2,12 +2,15 @@
 public class Coord {
     private int row;
     private int col;
+    private String coordinate;
     private boolean hasShip;
     private boolean wasShot;
 
     public Coord(int row, int col){ // Constructor
         this.row = row;
         this.col = col;
+
+        coordinate = Integer.toString(row) + col;
     }
 
     public void setRow(int row){
@@ -43,9 +46,7 @@ public class Coord {
     }
     @Override
     public String toString() {
-        String letter = numToLetter(row);
-        String coloum = Integer.toString(col);
-        return letter+ coloum;       
+        return "   "; 
     }
 
     /**
