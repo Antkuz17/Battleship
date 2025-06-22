@@ -13,7 +13,12 @@ public class Grid {
      * Prints the grid to terminal using nested for loops
      */
     public void drawGrid() {
-        for (int i = 0; i < 11; i++) {
+        System.out.println("");
+        System.out.print("    1   2   3   4   5   6   7   8   9   10");
+        System.out.println("");
+        printHorizontalLine();
+        for (int i = 0; i < 10; i++) {
+            System.out.print((char) ('A' + i) + " ");
             for (int z = 0; z < 10; z++) {
                 System.out.print("|");
                 System.out.print(grid[i][z]);
@@ -23,10 +28,10 @@ public class Grid {
                 printHorizontalLine();
             }
         }
-        printHorizontalLine();
     }
 
     public static void printHorizontalLine(){
+        System.out.print("  ");
         for (int i = 0; i < 10; i++) {
             System.out.print("+");
             for (int j = 0; j < 3; j++) {
