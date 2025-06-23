@@ -46,7 +46,10 @@ public class Coord {
     }
     @Override
     public String toString() {
-        return " ~ "; 
+        if(hasShip){
+            return " S ";
+        }
+        return "   "; 
     }
 
     /**

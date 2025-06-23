@@ -12,14 +12,21 @@ public class Ship {
     private boolean isSunk;
     private String vector; // From the initial pose does the ship point left right up down
 
+
+    private boolean rightValid = true;
+    private boolean leftValid = true;
+    private boolean upValid = true;
+    private boolean downValid = true;
+    private int possiblePose;
+
     public Ship(int length){
         this.length = length;
         this.initPos = null;
         this.isSunk = false;
-        this.vector = null;
+        this.vector = "down";
     }
 
-    public void placeShip(){
+    public void placeShip(Grid grid){
         System.out.println("Where do you want the " + (length -1) + " ship to start?: ");
         String potentialPos = input.nextLine(); // Potential pos still needs to be checked for validity
         Coord initPos = translation(potentialPos); // Translates from String "A1" to coordinate notation 0,0
@@ -31,6 +38,77 @@ public class Ship {
         }
         boolean answer = initPosValid(initPos);
         System.out.println(answer);
+
+        // Validading ship against take squares
+
+        initPos.setHasShip(true);
+        grid.grid[initPos.getRow()][initPos.getCol()] = initPos;
+        // Adding the ships coords
+        String userAnswer = "R";
+        if(possiblePose == 1){
+            userAnswer = "";
+        }
+
+        grid.drawGrid();
+        while(userAnswer.equals("R")){
+            if(rightValid){
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow()][initPos.getCol() + i].setHasShip(true);
+                }
+                grid.drawGrid();
+                System.out.print("Enter R to rotate ship(if not click anyother key): ");
+                userAnswer = input.nextLine();
+                if(!userAnswer.equalsIgnoreCase("R")){
+                    break;
+                }
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow()][initPos.getCol() + i].setHasShip(false);
+                }
+            }
+            if (downValid) {
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow() + i ][initPos.getCol()].setHasShip(true);
+                }
+                grid.drawGrid();
+                System.out.print("Enter R to rotate ship(if not click anyother key): ");
+                userAnswer = input.nextLine();
+                if (!userAnswer.equalsIgnoreCase("R")) {
+                    break;
+                }
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(false);
+                }
+            }
+            if (leftValid) {
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(true);
+                }
+                grid.drawGrid();
+                System.out.print("Enter R to rotate ship(if not click anyother key): ");
+                userAnswer = input.nextLine();
+                if (!userAnswer.equalsIgnoreCase("R")) {
+                    break;
+                }
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(false);
+                }
+            }
+            if (upValid) {
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(true);
+                }
+                grid.drawGrid();
+                System.out.print("Enter R to rotate ship(if not click anyother key): ");
+                userAnswer = input.nextLine();
+                if (!userAnswer.equalsIgnoreCase("R")) {
+                    break;
+                }
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(false);
+                }
+            }
+        }
+        
 
 
 
@@ -46,22 +124,30 @@ public class Ship {
      * @return boolean value of true if its placeable and false if not
      */
     public boolean initPosValid(Coord pose){ 
-        boolean rightValid = true;
-        boolean leftValid = true;
-        boolean upValid = true;
-        boolean downValid = true;
 
         if((pose.getRow() + (length-1)) > 9){
             downValid = false;
         }
+        else{
+            possiblePose+= 1;
+        }
         if ((pose.getRow() - (length - 1)) < 0) {
             upValid = false;
+        }
+        else {
+            possiblePose += 1;
         }
         if ((pose.getCol() - (length - 1)) < 0) {
             leftValid = false;
         }
+        else {
+            possiblePose += 1;
+        }
         if ((pose.getCol() + (length - 1)) > 9) {
             rightValid = false;
+        }
+        else {
+            possiblePose += 1;
         }
         if(downValid == false && upValid == false && leftValid == false && rightValid == false){
             return false;

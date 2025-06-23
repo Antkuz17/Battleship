@@ -7,14 +7,15 @@ public class Main {
         grid.drawGrid();
         System.out.println("You have 5 ships of different lengths (length 2-6)");
         Ship ship1 = new Ship(2);
-        ship1.placeShip();
+        ship1.placeShip(grid);
+        grid.drawGrid();
         Ship ship2 = new Ship(3);
-        ship2.placeShip();
+        ship2.placeShip(grid);
         Ship ship3 = new Ship(4);
-        ship3.placeShip();
+        ship3.placeShip(grid);
         Ship ship4 = new Ship(5);
-        ship4.placeShip();
+        ship4.placeShip(grid);
         Ship ship5 = new Ship(6);
-        ship5.placeShip();
+        ship5.placeShip(grid);
     }
 }
