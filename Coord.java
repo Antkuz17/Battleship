@@ -53,7 +53,7 @@ public class Coord {
      * Takes a letter and translates that letter into a corresponding number
      * 
      * @param letter The letter being translated (ex. "A")
-     * @return Corresponding number
+     * @return Corresponding number which in this case would be 1
      */
     public String numToLetter(int num) {
         switch (num) {
@@ -80,5 +80,39 @@ public class Coord {
             default:
                 return "?";
         }
-    }    
+    }  
+    
+    /**
+     * Takes a letter and translates that letter into a corresponding number (0–9)
+     * 
+     * @param letter The letter being translated (ex. "A")
+     * @return Corresponding number (0 for A, 1 for B, ..., 9 for J)
+     */
+    public int letterToNum(String letter) {
+        switch (letter.toUpperCase()) {
+            case "A":
+                return 0;
+            case "B":
+                return 1;
+            case "C":
+                return 2;
+            case "D":
+                return 3;
+            case "E":
+                return 4;
+            case "F":
+                return 5;
+            case "G":
+                return 6;
+            case "H":
+                return 7;
+            case "I":
+                return 8;
+            case "J":
+                return 9;
+            default:
+                return -1; // Invalid input
+        }
+    }
+
 }

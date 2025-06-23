@@ -1,5 +1,5 @@
 public class Grid {
-    private Coord[][] grid = new Coord[10][10]; // Size is set as 11 x 11 grid outer grid is used for Letter + numbers
+    public Coord[][] grid = new Coord[10][10]; // Size is set as 11 x 11 grid outer grid is used for Letter + numbers
 
     public Grid() { // Constructor for grid object, sets every index to a coord object
         for (int i = 0; i < 10; i++) {
