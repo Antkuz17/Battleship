@@ -42,6 +42,7 @@ public class Ship {
         // Validading ship against take squares
 
         initPos.setHasShip(true);
+        initPos.setShipPlacable(false);
         grid.grid[initPos.getRow()][initPos.getCol()] = initPos;
         // Adding the ships coords
         String userAnswer = "R";
@@ -59,6 +60,12 @@ public class Ship {
                 System.out.print("Enter R to rotate ship(if not click anyother key): ");
                 userAnswer = input.nextLine();
                 if(!userAnswer.equalsIgnoreCase("R")){
+                    vector = "right";
+                    for (int i = 1; i < (length +3); i++) {
+                        grid.grid[initPos.getRow()][initPos.getCol()-2 + i].setShipPlacable(false);
+                        grid.grid[initPos.getRow()+ 1][initPos.getCol()-2 + i].setShipPlacable(false);
+                        grid.grid[initPos.getRow() - 1][initPos.getCol()-2 + i].setShipPlacable(false);
+                    }
                     break;
                 }
                 for (int i = 1; i < (length); i++) {
@@ -73,6 +80,12 @@ public class Ship {
                 System.out.print("Enter R to rotate ship(if not click anyother key): ");
                 userAnswer = input.nextLine();
                 if (!userAnswer.equalsIgnoreCase("R")) {
+                    vector = "down";
+                    for (int i = 1; i < (length + 3); i++) {
+                        grid.grid[initPos.getRow()-2 +i][initPos.getCol()].setShipPlacable(false);
+                        grid.grid[initPos.getRow() - 2 + i][initPos.getCol() +1].setShipPlacable(false);
+                        grid.grid[initPos.getRow() - 2 + i][initPos.getCol() - 1].setShipPlacable(false);
+                    }
                     break;
                 }
                 for (int i = 1; i < (length); i++) {
@@ -87,6 +100,12 @@ public class Ship {
                 System.out.print("Enter R to rotate ship(if not click anyother key): ");
                 userAnswer = input.nextLine();
                 if (!userAnswer.equalsIgnoreCase("R")) {
+                    vector = "left";
+                    for (int i = 1; i < (length + 3); i++) {
+                        grid.grid[initPos.getRow()][initPos.getCol() + 2 - i].setShipPlacable(false);
+                        grid.grid[initPos.getRow()+1][initPos.getCol() + 2 - i].setShipPlacable(false);
+                        grid.grid[initPos.getRow()-1][initPos.getCol() + 2 - i].setShipPlacable(false);
+                    }
                     break;
                 }
                 for (int i = 1; i < (length); i++) {
@@ -101,18 +120,21 @@ public class Ship {
                 System.out.print("Enter R to rotate ship(if not click anyother key): ");
                 userAnswer = input.nextLine();
                 if (!userAnswer.equalsIgnoreCase("R")) {
+                    vector = "up";
+                    for (int i = 1; i < (length + 3); i++) {
+                        grid.grid[initPos.getRow() + 2 - i][initPos.getCol()].setShipPlacable(false);
+                        grid.grid[initPos.getRow() + 2 - i][initPos.getCol() + 1].setShipPlacable(false);
+                        grid.grid[initPos.getRow() + 2 - i][initPos.getCol() - 1].setShipPlacable(false);
+                    }
                     break;
                 }
                 for (int i = 1; i < (length); i++) {
                     grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(false);
                 }
-            }
+            }     
         }
-        
-
-
-
     }
+
 
     /**
      * Returns whether or not a position is a valid one

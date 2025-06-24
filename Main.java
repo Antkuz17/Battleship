@@ -11,11 +11,15 @@ public class Main {
         grid.drawGrid();
         Ship ship2 = new Ship(3);
         ship2.placeShip(grid);
+        grid.drawGrid();
         Ship ship3 = new Ship(4);
         ship3.placeShip(grid);
+        grid.drawGrid();
         Ship ship4 = new Ship(5);
         ship4.placeShip(grid);
+        grid.drawGrid();
         Ship ship5 = new Ship(6);
         ship5.placeShip(grid);
+        grid.drawGrid();
     }
 }

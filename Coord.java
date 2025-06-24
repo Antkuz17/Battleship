@@ -5,6 +5,7 @@ public class Coord {
     private String coordinate;
     private boolean hasShip;
     private boolean wasShot;
+    private boolean shipPlaceable = true;
 
     public Coord(int row, int col){ // Constructor
         this.row = row;
@@ -29,6 +30,10 @@ public class Coord {
         this.wasShot = wasShot;
     }
 
+    public void setShipPlacable(boolean shipPlaceable){
+        this.shipPlaceable = shipPlaceable;
+    }
+
     public int getRow() {
         return row;
     }
@@ -44,10 +49,17 @@ public class Coord {
     public boolean getwasShot() {
         return wasShot;
     }
+    
+    public boolean getShipPlaceble() {
+        return shipPlaceable;
+    }
     @Override
     public String toString() {
         if(hasShip){
             return " S ";
+        }
+        if(!shipPlaceable){
+            return(" N ");
         }
         return "   "; 
     }
