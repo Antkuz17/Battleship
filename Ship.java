@@ -19,24 +19,45 @@ public class Ship {
     private boolean downValid = true;
     private int possiblePose;
 
+    private boolean againstRightWall = false;
+    private boolean againstLeftWall = false;
+    private boolean againstTopWall = false;
+    private boolean againstBottomWall = false;
+
+
     public Ship(int length) {
         this.length = length;
         this.initPos = null;
         this.isSunk = false;
         this.vector = "down";
     }
-
+    
+    /**
+     * Places  ship on the provided grid by prompting the user for a starting position
+     * and allowing them to rotate the ship to a valid orientation.
+     * <p>
+     * The method ensures the ship is placed only on valid, unoccupied squares and
+     * does not overlap with other ships or go out of bounds. It updates the grid to mark the
+     * ship'sposition and adjacent squares as unplaceable for other ships. The user can
+     * rotate the ship to different valid orientations before finalizing the placement.
+     * This method will also take into account that a position which seems valid but would not 
+     * fit the ship is an invalid pose and not let you place a ship there.
+     *
+     * @param grid The object on which the ship will be placed.
+     */
     public void placeShip(Grid grid) {
         System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
         String potentialPos = input.nextLine(); // Potential pos still needs to be checked for validity
-        Coord initPos = translation(potentialPos); // Translates from String "A1" to coordinate notation 0,0
-        while (!isOnGridNotOnOtherShip(initPos, grid)) {
+        Coord initPos = translation(potentialPos); // Translates from String "A1" to a coord object
+
+        while (!isOnGridNotOnOtherShip(initPos, grid)) { // Keep reprompting till user inputs a valid square
             System.out.println("Not a valid position try again");
             System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
             potentialPos = input.nextLine();
-            initPos = translation(potentialPos);
+            initPos = translation(potentialPos); // Translates the string to a coord object
         }
-        boolean answer = initPosValid(initPos);
+
+        boolean answer = initPosFits(initPos, grid);
         System.out.println("initPoseValid" + answer);
 
         // Validading ship against take squares
@@ -49,6 +70,7 @@ public class Ship {
         if (possiblePose == 1) {
             userAnswer = "";
         }
+        setWallBounds(initPos);
 
         grid.drawGrid();
         while (userAnswer.equals("R")) {
@@ -62,6 +84,14 @@ public class Ship {
                 if (!userAnswer.equalsIgnoreCase("R")) {
                     vector = "right";
                     for (int i = 1; i < (length + 3); i++) {
+                        // if(againstTopWall && againstLeftWall){
+                        //     grid.grid[initPos.getRow()][initPos.getCol() + length].setShipPlacable(false);
+                        //     grid.grid[initPos.getRow() + 1][initPos.getCol() - 1+ i].setShipPlacable(false);
+                        // }
+                        // if (againstTopWall && againstRightWall) {
+                        //     grid.grid[initPos.getRow() + length][initPos.getCol()].setShipPlacable(false);
+                        //     grid.grid[initPos.getRow() + 1][initPos.getCol() - 1 + i].setShipPlacable(false);
+                        // }
                         grid.grid[initPos.getRow()][initPos.getCol() - 2 + i].setShipPlacable(false);
                         grid.grid[initPos.getRow() + 1][initPos.getCol() - 2 + i].setShipPlacable(false);
                         grid.grid[initPos.getRow() - 1][initPos.getCol() - 2 + i].setShipPlacable(false);
@@ -134,6 +164,26 @@ public class Ship {
             }
         }
     }
+    /**
+     * Sets the wall boundaries for a given position initial pose
+     * 
+     * Used to avoid indexout of bounds errors when setting adjacent squares to invalid
+     * @param pose
+     */
+    public void setWallBounds(Coord pose){
+        if(pose.getCol() == 0){
+            againstLeftWall = true;
+        }
+        if (pose.getCol() == 9) {
+            againstRightWall = true;
+        }
+        if (pose.getRow() == 0) {
+            againstTopWall = true;
+        }
+        if (pose.getRow() == 0) {
+            againstBottomWall = true;
+        }
+    }
 
     /**
      * Returns whether or not a position is a valid one
@@ -141,33 +191,76 @@ public class Ship {
      * Valid - At least one orientation in that initial pose will result in a legal
      * position
      * 
-     * Logic- Checks above and below the initpose to make sure that is a point where
-     * the ship would fit borders
+     * Logic- Checks above, below, left, and right of the initpose to make sure that is a point where
+     * the ship would fit 
+     * 
+     * Takes borders and other ships into account
      * 
      * @return boolean value of true if its placeable and false if not
      */
-    public boolean initPosValid(Coord pose) {
+    public boolean initPosFits(Coord pose, Grid grid) {
+        
+        int row  = pose.getRow();
+        int col = pose.getCol();
+        
         possiblePose = 0;
 
-        if ((pose.getRow() + (length - 1)) > 9) {
+        // Checks that the ship fits the bounds of the grid
+        if (row + (length - 1) > 9 ) {
             downValid = false;
         } else {
             possiblePose += 1;
         }
-        if ((pose.getRow() - (length - 1)) < 0) {
+        if (row - (length - 1) < 0) {
             upValid = false;
         } else {
             possiblePose += 1;
         }
-        if ((pose.getCol() - (length - 1)) < 0) {
+        if (col - (length - 1) < 0) {
             leftValid = false;
         } else {
             possiblePose += 1;
         }
-        if ((pose.getCol() + (length - 1)) > 9) {
+        if (col + (length - 1) > 9) {
             rightValid = false;
         } else {
             possiblePose += 1;
+        }
+
+        // Check right direction
+        if(rightValid){
+            for(int i = 0; i < length; i++){
+                if(!grid.grid[row][col + i].getShipPlaceble()){
+                    rightValid = false;
+                }
+            }
+        }
+        // Check up direction 
+        if (upValid) {
+            for (int i = 0; i < length; i++) {
+                if (!grid.grid[row - i][col].getShipPlaceble()) {
+                    upValid = false;
+                    break;
+                }
+            }
+        }
+        // Check down direction
+        if (downValid) {
+            for (int i = 0; i < length; i++) {
+                if (!grid.grid[row + i][col].getShipPlaceble()) {
+                    downValid = false;
+                    break;
+                }
+            }
+        }
+        // Check left direction 
+        if (leftValid) {
+            for (int i = 0; i < length; i++) {
+                if (!grid.grid[row][col - i].getShipPlaceble()) {
+                    leftValid = false;
+                    break;
+                }
+            }
         }
         if (downValid == false && upValid == false && leftValid == false && rightValid == false) {
             return false;
@@ -181,6 +274,9 @@ public class Ship {
 
     /**
      * Returns a true or false depending on whether the given coordinate is on the grid and isnt on a invalid square
+     * For example if a ship is at A1, A2 is an invalid square
+     * 
+     * This method will consider only that the init square is in bounds and its not on an invalid square
      * 
      * @return Return true if on grid and false if the coord is off grid
      */
