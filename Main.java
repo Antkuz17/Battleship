@@ -9,6 +9,7 @@ public class Main {
         Ship ship1 = new Ship(2);
         ship1.placeShip(grid);
         grid.drawGrid();
+        System.out.println("Ship placable: " + grid.grid[4][5].getShipPlaceble());
         Ship ship2 = new Ship(3);
         ship2.placeShip(grid);
         grid.drawGrid();
