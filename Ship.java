@@ -24,23 +24,27 @@ public class Ship {
     private boolean againstTopWall = false;
     private boolean againstBottomWall = false;
 
-
     public Ship(int length) {
         this.length = length;
         this.initPos = null;
         this.isSunk = false;
         this.vector = "down";
     }
-    
+
     /**
-     * Places  ship on the provided grid by prompting the user for a starting position
+     * Places ship on the provided grid by prompting the user for a starting
+     * position
      * and allowing them to rotate the ship to a valid orientation.
      * <p>
      * The method ensures the ship is placed only on valid, unoccupied squares and
-     * does not overlap with other ships or go out of bounds. It updates the grid to mark the
-     * ship'sposition and adjacent squares as unplaceable for other ships. The user can
-     * rotate the ship to different valid orientations before finalizing the placement.
-     * This method will also take into account that a position which seems valid but would not 
+     * does not overlap with other ships or go out of bounds. It updates the grid to
+     * mark the
+     * ship'sposition and adjacent squares as unplaceable for other ships. The user
+     * can
+     * rotate the ship to different valid orientations before finalizing the
+     * placement.
+     * This method will also take into account that a position which seems valid but
+     * would not
      * fit the ship is an invalid pose and not let you place a ship there.
      *
      * @param grid The object on which the ship will be placed.
@@ -50,7 +54,11 @@ public class Ship {
         String potentialPos = input.nextLine(); // Potential pos still needs to be checked for validity
         Coord initPos = translation(potentialPos); // Translates from String "A1" to a coord object
 
-        while (!isOnGridNotOnOtherShip(initPos, grid)) { // Keep reprompting till user inputs a valid square
+        while (!isOnGridNotOnOtherShip(initPos, grid) || !initPosFits(initPos, grid)) { // Keep reprompting till user
+                                                                                        // inputs a valid square
+            // System.out.println("initPosFits: " + initPosFits(initPos, grid));
+            // System.out.println("isOnGridNotOnOtherShip" + isOnGridNotOnOtherShip(initPos,
+            // grid));
             System.out.println("Not a valid position try again");
             System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
             potentialPos = input.nextLine();
@@ -83,18 +91,22 @@ public class Ship {
                 userAnswer = input.nextLine();
                 if (!userAnswer.equalsIgnoreCase("R")) {
                     vector = "right";
-                    for (int i = 1; i < (length + 3); i++) {
-                        // if(againstTopWall && againstLeftWall){
-                        //     grid.grid[initPos.getRow()][initPos.getCol() + length].setShipPlacable(false);
-                        //     grid.grid[initPos.getRow() + 1][initPos.getCol() - 1+ i].setShipPlacable(false);
-                        // }
-                        // if (againstTopWall && againstRightWall) {
-                        //     grid.grid[initPos.getRow() + length][initPos.getCol()].setShipPlacable(false);
-                        //     grid.grid[initPos.getRow() + 1][initPos.getCol() - 1 + i].setShipPlacable(false);
-                        // }
-                        grid.grid[initPos.getRow()][initPos.getCol() - 2 + i].setShipPlacable(false);
-                        grid.grid[initPos.getRow() + 1][initPos.getCol() - 2 + i].setShipPlacable(false);
-                        grid.grid[initPos.getRow() - 1][initPos.getCol() - 2 + i].setShipPlacable(false);
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetCol = initPos.getCol() + i -1;
+                        int topRow = initPos.getRow() + 1;
+                        int bottomRow = initPos.getRow() - 1;
+
+                        if (targetCol >= 0 && targetCol <= 9) {
+                            grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
+
+                            if (topRow <= 9) {
+                                grid.grid[topRow][targetCol].setShipPlacable(false);
+                            }
+
+                            if (bottomRow >= 0) {
+                                grid.grid[bottomRow][targetCol].setShipPlacable(false);
+                            }
+                        }
                     }
                     break;
                 }
@@ -112,9 +124,20 @@ public class Ship {
                 if (!userAnswer.equalsIgnoreCase("R")) {
                     vector = "down";
                     for (int i = 1; i < (length + 3); i++) {
-                        grid.grid[initPos.getRow() - 2 + i][initPos.getCol()].setShipPlacable(false);
-                        grid.grid[initPos.getRow() - 2 + i][initPos.getCol() + 1].setShipPlacable(false);
-                        grid.grid[initPos.getRow() - 2 + i][initPos.getCol() - 1].setShipPlacable(false);
+                        int targetRow = initPos.getRow() - 2 + i;
+                        int leftCol = initPos.getCol() - 1;
+                        int rightCol = initPos.getCol() + 1;
+                        if (targetRow >= 0 && targetRow < grid.grid.length) {
+                            grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
+
+                            if (leftCol >= 0) {
+                                grid.grid[targetRow][leftCol].setShipPlacable(false);
+                            }
+
+                            if (rightCol < 9) {
+                                grid.grid[targetRow][rightCol].setShipPlacable(false);
+                            }
+                        }
                     }
                     break;
                 }
@@ -131,10 +154,22 @@ public class Ship {
                 userAnswer = input.nextLine();
                 if (!userAnswer.equalsIgnoreCase("R")) {
                     vector = "left";
-                    for (int i = 1; i < (length + 3); i++) {
-                        grid.grid[initPos.getRow()][initPos.getCol() + 2 - i].setShipPlacable(false);
-                        grid.grid[initPos.getRow() + 1][initPos.getCol() + 2 - i].setShipPlacable(false);
-                        grid.grid[initPos.getRow() - 1][initPos.getCol() + 2 - i].setShipPlacable(false);
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetCol = initPos.getCol() - length + i;
+                        int topRow = initPos.getRow() + 1;
+                        int bottomRow = initPos.getRow() - 1;
+
+                        if (targetCol >= 0 && targetCol <= 9) {
+                            grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
+
+                            if (topRow <= 9) {
+                                grid.grid[topRow][targetCol].setShipPlacable(false);
+                            }
+
+                            if (bottomRow >= 0) {
+                                grid.grid[bottomRow][targetCol].setShipPlacable(false);
+                            }
+                        }
                     }
                     break;
                 }
@@ -151,10 +186,22 @@ public class Ship {
                 userAnswer = input.nextLine();
                 if (!userAnswer.equalsIgnoreCase("R")) {
                     vector = "up";
-                    for (int i = 1; i < (length + 3); i++) {
-                        grid.grid[initPos.getRow() + 2 - i][initPos.getCol()].setShipPlacable(false);
-                        grid.grid[initPos.getRow() + 2 - i][initPos.getCol() + 1].setShipPlacable(false);
-                        grid.grid[initPos.getRow() + 2 - i][initPos.getCol() - 1].setShipPlacable(false);
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetRow = initPos.getRow() - i +1;
+                        int leftCol = initPos.getCol() - 1;
+                        int rightCol = initPos.getCol() + 1;
+
+                        if (targetRow >= 0 && targetRow <= 9) {
+                            grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
+
+                            if (leftCol >= 0) {
+                                grid.grid[targetRow][leftCol].setShipPlacable(false);
+                            }
+
+                            if (rightCol <= 9) {
+                                grid.grid[targetRow][rightCol].setShipPlacable(false);
+                            }
+                        }
                     }
                     break;
                 }
@@ -164,14 +211,17 @@ public class Ship {
             }
         }
     }
+
     /**
      * Sets the wall boundaries for a given position initial pose
      * 
-     * Used to avoid indexout of bounds errors when setting adjacent squares to invalid
+     * Used to avoid indexout of bounds errors when setting adjacent squares to
+     * invalid
+     * 
      * @param pose
      */
-    public void setWallBounds(Coord pose){
-        if(pose.getCol() == 0){
+    public void setWallBounds(Coord pose) {
+        if (pose.getCol() == 0) {
             againstLeftWall = true;
         }
         if (pose.getCol() == 9) {
@@ -191,22 +241,23 @@ public class Ship {
      * Valid - At least one orientation in that initial pose will result in a legal
      * position
      * 
-     * Logic- Checks above, below, left, and right of the initpose to make sure that is a point where
-     * the ship would fit 
+     * Logic- Checks above, below, left, and right of the initpose to make sure that
+     * is a point where
+     * the ship would fit
      * 
      * Takes borders and other ships into account
      * 
      * @return boolean value of true if its placeable and false if not
      */
     public boolean initPosFits(Coord pose, Grid grid) {
-        
-        int row  = pose.getRow();
+
+        int row = pose.getRow();
         int col = pose.getCol();
-        
+
         possiblePose = 0;
 
         // Checks that the ship fits the bounds of the grid
-        if (row + (length - 1) > 9 ) {
+        if (row + (length - 1) > 9) {
             downValid = false;
         } else {
             possiblePose += 1;
@@ -228,14 +279,14 @@ public class Ship {
         }
 
         // Check right direction
-        if(rightValid){
-            for(int i = 0; i < length; i++){
-                if(!grid.grid[row][col + i].getShipPlaceble()){
+        if (rightValid) {
+            for (int i = 0; i < length; i++) {
+                if (!grid.grid[row][col + i].getShipPlaceble()) {
                     rightValid = false;
                 }
             }
         }
-        // Check up direction 
+        // Check up direction
         if (upValid) {
             for (int i = 0; i < length; i++) {
                 if (!grid.grid[row - i][col].getShipPlaceble()) {
@@ -253,7 +304,7 @@ public class Ship {
                 }
             }
         }
-        // Check left direction 
+        // Check left direction
         if (leftValid) {
             for (int i = 0; i < length; i++) {
                 if (!grid.grid[row][col - i].getShipPlaceble()) {
@@ -273,10 +324,12 @@ public class Ship {
     }
 
     /**
-     * Returns a true or false depending on whether the given coordinate is on the grid and isnt on a invalid square
+     * Returns a true or false depending on whether the given coordinate is on the
+     * grid and isnt on a invalid square
      * For example if a ship is at A1, A2 is an invalid square
      * 
-     * This method will consider only that the init square is in bounds and its not on an invalid square
+     * This method will consider only that the init square is in bounds and its not
+     * on an invalid square
      * 
      * @return Return true if on grid and false if the coord is off grid
      */
