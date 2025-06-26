@@ -65,9 +65,6 @@ public class Ship {
             initPos = translation(potentialPos); // Translates the string to a coord object
         }
 
-        boolean answer = initPosFits(initPos, grid);
-        System.out.println("initPoseValid" + answer);
-
         // Validading ship against take squares
 
         initPos.setHasShip(true);
@@ -259,30 +256,23 @@ public class Ship {
         // Checks that the ship fits the bounds of the grid
         if (row + (length - 1) > 9) {
             downValid = false;
-        } else {
-            possiblePose += 1;
-        }
+        } 
         if (row - (length - 1) < 0) {
             upValid = false;
-        } else {
-            possiblePose += 1;
-        }
+        } 
         if (col - (length - 1) < 0) {
             leftValid = false;
-        } else {
-            possiblePose += 1;
-        }
+        } 
         if (col + (length - 1) > 9) {
             rightValid = false;
-        } else {
-            possiblePose += 1;
-        }
+        } 
 
         // Check right direction
         if (rightValid) {
             for (int i = 0; i < length; i++) {
                 if (!grid.grid[row][col + i].getShipPlaceble()) {
                     rightValid = false;
+                    possiblePose -= 1;
                 }
             }
         }
@@ -291,6 +281,7 @@ public class Ship {
             for (int i = 0; i < length; i++) {
                 if (!grid.grid[row - i][col].getShipPlaceble()) {
                     upValid = false;
+                    possiblePose -= 1;
                     break;
                 }
             }
@@ -300,6 +291,7 @@ public class Ship {
             for (int i = 0; i < length; i++) {
                 if (!grid.grid[row + i][col].getShipPlaceble()) {
                     downValid = false;
+                    possiblePose -= 1;
                     break;
                 }
             }
@@ -309,6 +301,7 @@ public class Ship {
             for (int i = 0; i < length; i++) {
                 if (!grid.grid[row][col - i].getShipPlaceble()) {
                     leftValid = false;
+                    possiblePose -= 1;
                     break;
                 }
             }
@@ -365,6 +358,50 @@ public class Ship {
         System.out.println("Second Number: " + secondNumber);
         Coord initPos = new Coord(firstNumber, secondNumber);
         return initPos;
+    }
+    /**
+     * Will add a ship to the Ai's grid 
+     * 
+     * Init pos is randomized until a valid pose is found then it will randomly add the ship in a random position
+     * @param grid
+     */
+    public void placeAiShip(Grid grid){
+        int[] arrayCoord = genRandCoord();
+        int x = arrayCoord[0];
+        int y = arrayCoord[1];
+        System.out.print(x);
+        System.out.print(y);
+        Coord initPos = new Coord(x, y);
+        while (!isOnGridNotOnOtherShip(initPos, grid) || !initPosFits(initPos, grid)) { // Keep regenerating till valid pose 
+            //System.out.println("initPosFits: " + initPosFits(initPos, grid));
+            //System.out.println("isOnGridNotOnOtherShip" + isOnGridNotOnOtherShip(initPos,grid));
+            arrayCoord = genRandCoord();
+            x = arrayCoord[0];
+            y = arrayCoord[1];
+            System.out.println(x + y);
+            initPos = new Coord(x, y);
+        }
+
+        // Validading ship against take squares
+        initPos.setHasShip(true);
+        initPos.setShipPlacable(false);
+        grid.grid[initPos.getRow()][initPos.getCol()] = initPos;
+
+    }
+    /**
+     * Generates a random set of coords 
+     * 
+     * ex (6,2) (0,9) (7,1)
+     * 
+     * @return These numbers as a two element array
+     */
+    public int[] genRandCoord(){
+        int[] nums = new int[2];
+        for(int i =0; i< 2; i++){
+            int random = (int) (Math.random() * (10 - 1 + 1)) + 1;
+            nums[i] = random;
+        }
+        return nums;
     }
 
 }
