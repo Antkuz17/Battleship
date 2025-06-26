@@ -75,7 +75,6 @@ public class Ship {
         if (possiblePose == 1) {
             userAnswer = "";
         }
-        setWallBounds(initPos);
 
         grid.drawGrid();
         while (userAnswer.equals("R")) {
@@ -247,6 +246,10 @@ public class Ship {
      * @return boolean value of true if its placeable and false if not
      */
     public boolean initPosFits(Coord pose, Grid grid) {
+        rightValid = true;
+        leftValid = true;
+        upValid = true;
+        downValid = true;
 
         int row = pose.getRow();
         int col = pose.getCol();
@@ -369,8 +372,6 @@ public class Ship {
         int[] arrayCoord = genRandCoord();
         int x = arrayCoord[0];
         int y = arrayCoord[1];
-        System.out.print(x);
-        System.out.print(y);
         Coord initPos = new Coord(x, y);
         while (!isOnGridNotOnOtherShip(initPos, grid) || !initPosFits(initPos, grid)) { // Keep regenerating till valid pose 
             //System.out.println("initPosFits: " + initPosFits(initPos, grid));
@@ -378,16 +379,125 @@ public class Ship {
             arrayCoord = genRandCoord();
             x = arrayCoord[0];
             y = arrayCoord[1];
-            System.out.println(x + y);
+
             initPos = new Coord(x, y);
         }
 
-        // Validading ship against take squares
+        
         initPos.setHasShip(true);
         initPos.setShipPlacable(false);
+
+        // Setting the initial pose thats been validated as the initpos on the grid
         grid.grid[initPos.getRow()][initPos.getCol()] = initPos;
 
-    }
+
+        while (true) {
+            int random = (int) (Math.random() * (4 - 1 + 1)) + 1;
+            if (rightValid && random == 1) {
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow()][initPos.getCol() + i].setHasShip(true);
+                }
+    
+                    vector = "right";
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetCol = initPos.getCol() + i - 1;
+                        int topRow = initPos.getRow() + 1;
+                        int bottomRow = initPos.getRow() - 1;
+
+                        if (targetCol >= 0 && targetCol <= 9) {
+                            grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
+
+                            if (topRow <= 9) {
+                                grid.grid[topRow][targetCol].setShipPlacable(false);
+                            }
+
+                            if (bottomRow >= 0) {
+                                grid.grid[bottomRow][targetCol].setShipPlacable(false);
+                            }
+                        }
+                    }
+                    break;
+            }
+            if (downValid && random ==2) {
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(true);
+                }
+               
+                    vector = "down";
+                    for (int i = 1; i < (length + 3); i++) {
+                        int targetRow = initPos.getRow() - 2 + i;
+                        int leftCol = initPos.getCol() - 1;
+                        int rightCol = initPos.getCol() + 1;
+                        if (targetRow >= 0 && targetRow < grid.grid.length) {
+                            grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
+
+                            if (leftCol >= 0) {
+                                grid.grid[targetRow][leftCol].setShipPlacable(false);
+                            }
+
+                            if (rightCol < 9) {
+                                grid.grid[targetRow][rightCol].setShipPlacable(false);
+                            }
+                        }
+                    }
+                    break;
+                }
+
+            if (leftValid && random == 3) {
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(true);
+                }
+
+                    vector = "left";
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetCol = initPos.getCol() - length + i;
+                        int topRow = initPos.getRow() + 1;
+                        int bottomRow = initPos.getRow() - 1;
+
+                        if (targetCol >= 0 && targetCol <= 9) {
+                            grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
+
+                            if (topRow <= 9) {
+                                grid.grid[topRow][targetCol].setShipPlacable(false);
+                            }
+
+                            if (bottomRow >= 0) {
+                                grid.grid[bottomRow][targetCol].setShipPlacable(false);
+                            }
+                        }
+                    }
+                    break;
+                }
+            if (upValid && random == 4) {
+                for (int i = 1; i < (length); i++) {
+                    grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(true);
+                }
+
+                    vector = "up";
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetRow = initPos.getRow() - i + 1;
+                        int leftCol = initPos.getCol() - 1;
+                        int rightCol = initPos.getCol() + 1;
+
+                        if (targetRow >= 0 && targetRow <= 9) {
+                            grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
+
+                            if (leftCol >= 0) {
+                                grid.grid[targetRow][leftCol].setShipPlacable(false);
+                            }
+
+                            if (rightCol <= 9) {
+                                grid.grid[targetRow][rightCol].setShipPlacable(false);
+                            }
+                        }
+                    }
+                    break;
+                }
+
+            }
+        }
+
+    
     /**
      * Generates a random set of coords 
      * 
@@ -398,7 +508,7 @@ public class Ship {
     public int[] genRandCoord(){
         int[] nums = new int[2];
         for(int i =0; i< 2; i++){
-            int random = (int) (Math.random() * (10 - 1 + 1)) + 1;
+            int random = (int) (Math.random() * 10);
             nums[i] = random;
         }
         return nums;

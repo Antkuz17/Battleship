@@ -58,9 +58,7 @@ public class Coord {
         if(hasShip){
             return " S ";
         }
-        if(!shipPlaceable){
-            return(" N ");
-        }
+
         return "   "; 
     }
 

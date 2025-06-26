@@ -30,14 +30,20 @@ public class Main {
         System.out.println("AI Grid: "); // will be deleted later just for trouble shooting
         Ship aiShip1 = new Ship(2);
         aiShip1.placeAiShip(aiGrid);
-        // Ship aiShip2 = new Ship(3);
-        // aiShip2.placeAiShip(aiGrid);
-        // Ship aiShip3 = new Ship(4);
-        // aiShip3.placeAiShip(aiGrid);
-        // Ship aiShip4 = new Ship(5);
-        // aiShip4.placeAiShip(aiGrid);
+        Ship aiShip2 = new Ship(3);
+        aiShip2.placeAiShip(aiGrid);
+        aiGrid.drawGrid();
+        Ship aiShip3 = new Ship(4);
+        aiShip3.placeAiShip(aiGrid);
+        
+        Ship aiShip4 = new Ship(5);
+        aiShip4.placeAiShip(aiGrid);
+        Ship aiShip5 = new Ship(6);
+        aiShip5.placeAiShip(aiGrid);
+        aiGrid.drawGrid();
         // Ship aiShip5 = new Ship(6);
         // aiShip5.placeAiShip(aiGrid);
+        // aiGrid.drawGrid();
 
     }
 
