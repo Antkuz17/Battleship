@@ -53,10 +53,20 @@ public class Coord {
     public boolean getShipPlaceble() {
         return shipPlaceable;
     }
+    // If nothing happened in the coord, its a blank
+    // If hasShip and not shot, then S (Ship)
+    // If hasShip and was shot then H (Hit)
+    // If no ship was shot then M (Miss)
     @Override
     public String toString() {
+        if(hasShip && wasShot){
+            return " H ";
+        }
         if(hasShip){
             return " S ";
+        }
+        if(wasShot){
+            return " M ";
         }
 
         return "   "; 

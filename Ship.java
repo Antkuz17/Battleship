@@ -56,9 +56,6 @@ public class Ship {
 
         while (!isOnGridNotOnOtherShip(initPos, grid) || !initPosFits(initPos, grid)) { // Keep reprompting till user
                                                                                         // inputs a valid square
-            // System.out.println("initPosFits: " + initPosFits(initPos, grid));
-            // System.out.println("isOnGridNotOnOtherShip" + isOnGridNotOnOtherShip(initPos,
-            // grid));
             System.out.println("Not a valid position try again");
             System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
             potentialPos = input.nextLine();
