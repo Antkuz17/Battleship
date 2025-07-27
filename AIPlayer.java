@@ -1,4 +1,4 @@
-public class AIPlayer {
+public class AIPlayer extends Player{
     
     Boolean huntMode = true; // If AI has no hits, hunt mode means semi random shots (wont shoot if the ship cant be there)
     Boolean targetMode = false; // If AI got a hit, target mode uses logic to sink it
@@ -35,6 +35,9 @@ public class AIPlayer {
         if(huntMode){
             // Generate random coord
             Coord guessCoord = translation(generateRandCoord()); // Random guess by the AI
+            if(guessCoord.getwasShot()){
+
+            }
         }
         
 
