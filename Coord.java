@@ -78,7 +78,7 @@ public class Coord {
      * @param letter The letter being translated (ex. "A")
      * @return Corresponding number which in this case would be 1
      */
-    public String numToLetter(int num) {
+    public static String numToLetter(int num) {
         switch (num) {
             case 0:
                 return "A";

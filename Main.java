@@ -2,9 +2,8 @@ import java.util.Scanner;
 
 public class Main {
     public Scanner input = new Scanner(System.in);
-
     public static void main(String[] args) {
-        
+
         Grid grid = new Grid(); // contains the players ships and enemy shots
         Grid playerShotsGrid = new Grid(); // Contains the players shots
         Grid aiGrid = new Grid(); // Contains the ai ships and enemy shots
@@ -51,7 +50,9 @@ public class Main {
         boolean playerShipsDestroyed = false;
         boolean aiShipsDestroyed = false;
         while (!playerShipsDestroyed && !aiShipsDestroyed){
-            aiGrid.Shoot(aiGrid, playerShotsGrid); // Player shooting
+            aiGrid.playerShoot(aiGrid, playerShotsGrid); // Player shooting
+
+            // All of the grids shown for testing purposes
             System.out.println("Players Grid:");
             grid.drawGrid();
             System.out.println("Players Shots Grid:");
@@ -60,6 +61,8 @@ public class Main {
             aiGrid.drawGrid();
             System.out.println("Ais shots Grid:");
             aiShotsGrid.drawGrid();
+
+            grid.playerShoot(grid, aiShotsGrid);
 
 
         }

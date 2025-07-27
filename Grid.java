@@ -45,26 +45,28 @@ public class Grid {
         }
         System.out.println("+"); // End of line
     }
-/**
- * 
- * @param grid The grid being shot at 
- */
 
-    // In here we need to do a number of things
-    // 1. update the shots for the player on the player shot board
-    // 2. update the shots for the ai on the ai board
-    public void Shoot(Grid enemyGrid, Grid shotsGrid){
+
+    /**
+     * Deals with the player shooting at the ai
+     * First Position validation occurs making sure the shot is on the board and has not been shot yet
+     * If valid, then positions are updated on all approriate boards
+     * @param enemyGrid The grid of the person being shot at
+     * @param shotsGrid Your own shots grid that monitors your shots
+     */
+    public void playerShoot(Grid enemyGrid, Grid shotsGrid){
         System.out.println("Where would you like to shoot?");
         String answer = input.nextLine();
         Coord shotCoord = translation(answer);
-
+        while(shotCoord.getCol() > 9 || shotCoord.getCol() < 0 || shotCoord.getRow() > 9 || shotCoord.getRow() < 0 || enemyGrid.grid[shotCoord
+                .getRow()][shotCoord.getCol()].getwasShot()){ // Validates the pose is on board
+            System.out.println("Shot lays outside grid try again");
+            System.out.println("Where would you like to shoot?");
+            answer = input.nextLine();
+            shotCoord = translation(answer);
+        }
         enemyGrid.grid[shotCoord.getRow()][shotCoord.getCol()].setWasShot(true);
         shotsGrid.grid[shotCoord.getRow()][shotCoord.getCol()].setWasShot(true);
-
-
-
-
-        
     }
 
     /**
@@ -87,28 +89,7 @@ public class Grid {
         } else {
             secondNumber = Character.getNumericValue(pos.charAt(1)) - 1;
         }
-        System.out.println("First Number: " + firstNumber);
-        System.out.println("Second Number: " + secondNumber);
         Coord initPos = new Coord(firstNumber, secondNumber);
         return initPos;
     }
-
-    // /**
-    // * Places a hit marker "" at a position on the board
-    // *
-    // * @param x The number shot at
-    // * @param y The letter shot at
-    // */
-    // public void placeHitMarker(String x, String y) {
-    // int ycoord = letterToNum(y);
-    // int xcoord = Integer.parseInt(x);
-    // xcoord += 1;
-    // ycoord += 1;
-    // grid[ycoord - 1][xcoord - 1] = " X ";
-    // }
-
-    public void missed(int x, int y) {
-
-    }
-
 }
