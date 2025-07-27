@@ -1,6 +1,9 @@
 public class AIPlayer extends Player{
     
-    Boolean huntMode = true; // If AI has no hits, hunt mode means semi random shots (wont shoot if the ship cant be there)
+    Boolean huntMode = true; 
+    // If AI has no hits, hunt mode means semi random shots (wont shoot if the ship cant be there)
+    // Done by cross refrencing the currently active ships
+
     Boolean targetMode = false; // If AI got a hit, target mode uses logic to sink it
 
     Coord pointOfInterest = null; // This is the coordinate position where there is a ship
@@ -32,41 +35,16 @@ public class AIPlayer extends Player{
      */
     public void aiShoot(Grid enemyGrid, Grid shotsGrid) {
         
-        if(huntMode){
-            // Generate random coord
-            Coord guessCoord = translation(generateRandCoord()); // Random guess by the AI
-            if(guessCoord.getwasShot()){
+        // if(huntMode){
+        //     // Generate random coord
+        //     Coord guessCoord = translation(generateRandCoord()); // Random guess by the AI
+        //     if(guessCoord.getwasShot()){
 
-            }
-        }
+        //     }
+        // }
         
 
     }
 
-    /**
-     * Generates a random coordinate on the grid
-     * 
-     * @return String in the form of A1 or B2 or G10
-     */
-    public String generateRandCoord() {
-        int randX = (int) (Math.random() * 10);
-        int randY = (int) (Math.random() * 10);
-        String coord = Coord.numToLetter(randX) + (randY + 1);
-        return coord;
-    }
 
-    public Coord translation(String pos) {
-        char firstLetter = pos.charAt(0);
-        int firstNumber = Character.getNumericValue(firstLetter) - 10;
-        int secondNumber;
-        if (Integer.parseInt(pos.substring(1)) > 10) {
-            secondNumber = 11;
-        } else if (Integer.parseInt(pos.substring(1)) == 10) {
-            secondNumber = 9;
-        } else {
-            secondNumber = Character.getNumericValue(pos.charAt(1)) - 1;
-        }
-        Coord initPos = new Coord(firstNumber, secondNumber);
-        return initPos;
-    }
 }
