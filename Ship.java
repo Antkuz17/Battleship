@@ -47,17 +47,21 @@ public class Ship {
      * @param grid The object on which the ship will be placed.
      */
     public void placeShip(Grid grid) {
-        System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
-        String potentialPos = input.nextLine(); // Potential pos still needs to be checked for validity
-        Coord initPos = translation(potentialPos); // Translates from String "A1" to a coord object
 
-        while (!isOnGridNotOnOtherShip(initPos, grid) || !initPosFits(initPos, grid)) { // Keep reprompting till user
-                                                                                        // inputs a valid square
-            System.out.println("Not a valid position try again");
-            System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
-            potentialPos = input.nextLine();
-            initPos = translation(potentialPos); // Translates the string to a coord object
-        }
+        System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
+
+        String potentialPos = input.nextLine(); // Potential position still needs to be checked for validity
+
+        int[] coords = Utils.translation(potentialPos);
+
+        // Checks whether or not the coordinate is on the grid, if its a valid coordinate, and if the ship would fit
+        // while (!Utils.isOnGrid(potentialPos)|| !initPosFits(initPos, grid) || grid) { 
+        //                                                                                 // inputs a valid square
+        //     System.out.println("Not a valid position try again");
+        //     System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
+        //     potentialPos = input.nextLine();
+        //     initPos = translation(potentialPos); // Translates the string to a coord object
+        // }
 
 //         // Validading ship against take squares
 

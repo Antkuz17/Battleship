@@ -1,28 +1,31 @@
+import java.util.Scanner;
+
 public class Utils {
+
+    public static Scanner input = new Scanner(System.in);
+
     /**
      * Translates a user input into grid coords
      * 
      * For example A1 is turned into 0,0 or J10 is turned into 9,9
      * 
      * @param pos The user string input like "A1"
-     * @return An coordinate object with the translated coords
+     * @return An integer array of two numbers
      */
 
-    public static Coord translation(String pos) {
+    public static int[] translation(String pos) {
         char firstLetter = pos.charAt(0);
         int firstNumber = Character.getNumericValue(firstLetter) - 10;
+        pos = pos.substring(1);
         int secondNumber;
-        if (Integer.parseInt(pos.substring(1)) > 10) {
-            secondNumber = 11;
-        } else if (Integer.parseInt(pos.substring(1)) == 10) {
+        if (Integer.parseInt(pos) == 10) {
             secondNumber = 9;
         } else {
-            secondNumber = Character.getNumericValue(pos.charAt(1)) - 1;
+            secondNumber = Character.getNumericValue(pos.charAt(0)) - 1;
         }
-        Coord initPos = new Coord(firstNumber, secondNumber);
-        return initPos;
+        int[] Coords = { firstNumber, secondNumber };
+        return Coords;
     }
-
 
     /**
      * Generates a random coordinate on the grid
@@ -51,14 +54,162 @@ public class Utils {
     // }
     // return nums;
     // }
+    // /**
+    // * Gets a coordinate from the user in the from A1. Does validation to ensure
+    // that the inputed coordinate is on the grid
+    // * @return String version of the coordinate that has been validated
+    // */
+    // public String getCoord(){
+    // Boolean valid = true;
+    // String Coord;
+    // while(true){
+    // System.out.print("Enter a coordinate: ");
+    // Coord = input.nextLine();
+    // if(Coord.charAt(0))
+    // }
+    // }
+
     /**
-     * Gets a coordinate from the user in the from A1. Does validation to ensure that the inputed coordinate is on the grid
-     * @return
+     * Given a String coordinate, this method tells you whether or not it is on the
+     * grid
+     * Checks the length of the string given as well as the number and letter of the
+     * coord
+     * 
+     * @param coord The coordinate that needs validating
+     * @return True if the coordinate is on the grid and false if not
      */
-    public String getCoord(){
-        while(true){
-            String Coord = input.nextLine();
-            if()
+    public static boolean isOnGrid(String coord) {
+
+        // Checking the length of the given coordinate
+        if (coord == null || coord.length() < 2 || coord.length() > 3) {
+            return false;
         }
+
+        // Checking that the first character is on the axis
+        if (coord.charAt(0) < 'A' || coord.charAt(0) > 'J') {
+            return false;
+        }
+
+        // Checking that the number at the end is not greater than 10
+        String numPart = coord.substring(1);
+        try {
+            int num = Integer.parseInt(numPart);
+            if (num < 1 || num > 10) {
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+
     }
+
+    /**
+     * Returns a boolean value depending on whether a ship would fit at the given
+     * coord. This method
+     * will check whether given a start coord, a ship would fit in any direction
+     * (up, down, left, right)
+     * Takes borders and other ships into account
+     * 
+     * @param grid   The grid that is being checked
+     * @param Length The length of the ship
+     * @param coord  The coordinate where the ship stars
+     * @return Returns a true value if the ship would fit and false if it doesnt
+     */
+    public static boolean posFits(Grid grid, int Length, String coord) {
+
+    }
+
+    /**
+     * // * Returns whether or not a position is a valid one
+     * // *
+     * // * Valid - At least one orientation in that initial pose will result in a
+     * legal
+     * // * position
+     * // *
+     * // * Logic- Checks above, below, left, and right of the initpose to make sure
+     * that
+     * // * is a point where
+     * // * the ship would fit
+     * // *
+     * // * Takes borders and other ships into account
+     * // *
+     * // * @return boolean value of true if its placeable and false if not
+     * //
+     */
+    // public boolean initPosFits(Coord pose, Grid grid) {
+    // rightValid = true;
+    // leftValid = true;
+    // upValid = true;
+    // downValid = true;
+
+    // int row = pose.getRow();
+    // int col = pose.getCol();
+
+    // possiblePose = 0;
+
+    // // Checks that the ship fits the bounds of the grid
+    // if (row + (length - 1) > 9) {
+    // downValid = false;
+    // }
+    // if (row - (length - 1) < 0) {
+    // upValid = false;
+    // }
+    // if (col - (length - 1) < 0) {
+    // leftValid = false;
+    // }
+    // if (col + (length - 1) > 9) {
+    // rightValid = false;
+    // }
+
+    // // Check right direction
+    // if (rightValid) {
+    // for (int i = 0; i < length; i++) {
+    // if (!grid.grid[row][col + i].getShipPlaceble()) {
+    // rightValid = false;
+    // possiblePose -= 1;
+    // }
+    // }
+    // }
+    // // Check up direction
+    // if (upValid) {
+    // for (int i = 0; i < length; i++) {
+    // if (!grid.grid[row - i][col].getShipPlaceble()) {
+    // upValid = false;
+    // possiblePose -= 1;
+    // break;
+    // }
+    // }
+    // }
+    // // Check down direction
+    // if (downValid) {
+    // for (int i = 0; i < length; i++) {
+    // if (!grid.grid[row + i][col].getShipPlaceble()) {
+    // downValid = false;
+    // possiblePose -= 1;
+    // break;
+    // }
+    // }
+    // }
+    // // Check left direction
+    // if (leftValid) {
+    // for (int i = 0; i < length; i++) {
+    // if (!grid.grid[row][col - i].getShipPlaceble()) {
+    // leftValid = false;
+    // possiblePose -= 1;
+    // break;
+    // }
+    // }
+    // }
+    // if (downValid == false && upValid == false && leftValid == false &&
+    // rightValid == false) {
+    // return false;
+    // }
+    // System.out.println("Right Valid: " + rightValid);
+    // System.out.println("Left Valid: " + leftValid);
+    // System.out.println("Up Valid: " + upValid);
+    // System.out.println("Down Valid" + downValid);
+    // return true;
+    // }
+
 }
