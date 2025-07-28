@@ -109,77 +109,106 @@ public class Utils {
      * coord. This method
      * will check whether given a start coord, a ship would fit in any direction
      * (up, down, left, right)
-     * Takes borders and other ships into account
+     * Takes borders and other ships into account.
+     * Assumes that the initial position is on the board
      * 
      * @param grid   The grid that is being checked
      * @param Length The length of the ship
      * @param coord  The coordinate where the ship stars
      * @return Returns a true value if the ship would fit and false if it doesnt
      */
-    public static boolean posFits(Grid grid, int Length, String coord) {
+    public static boolean posFits(Grid grid, int length, String coord) {
 
+        int[] arrayCoords = Utils.translation(coord); // Takes string and converts it to an array of 2 coords
+
+        int row = arrayCoords[0];
+        int col = arrayCoords[1];
+
+        Boolean rightValid = true;
+        Boolean upValid = true;
+        Boolean downValid = true;
+        Boolean leftValid = true;
+
+        int directionCounter = 0; // If = 4 then all 4 directions are invalid
+
+        // Checks the validity of each direciton with regard to the borders
+        // Add's the length of the ship to the row and coloum and checks whether the
+        // result exceeds the bounds
+        if (col + (length - 1) > 9) {
+            rightValid = false;
+            directionCounter++;
+        }
+        if (row - (length - 1) < 0) {
+            upValid = false;
+            directionCounter++;
+        }
+        if (col - (length - 1) < 0) {
+            leftValid = false;
+            directionCounter++;
+        }
+        if (col + (length - 1) > 9) {
+            downValid = false;
+            directionCounter++;
+        }
+
+        // If all four directions dont fit return false
+        if (directionCounter == 4) {
+            return false;
+        }
+
+
+        // Checking for intersections with other ships using for loops to iterate that
+        // many times in all directions
+
+        // Checking right direction
+        if (rightValid) {
+            for (int i = 0; i < length; i++) {
+                if (!grid.getCell(row, col + i).getShipPlaceable()) {
+                    rightValid = false;
+                }
+            }
+        }
+
+        // Checking up direction
+        if (upValid) {
+            for (int i = 0; i < length; i++) {
+                if (!grid.getCell(row - i, col).getShipPlaceable()) {
+                    upValid = false;
+                }
+            }
+        }
+
+        // Checking down direction
+        if (downValid) {
+            for (int i = 0; i < length; i++) {
+                if (!grid.getCell(row + i, col).getShipPlaceable()) {
+                    downValid = false;
+                }
+            }
+        }
+
+        // Checking left direction
+        if (leftValid) {
+            for (int i = 0; i < length; i++) {
+                if (!grid.getCell(row, col - i).getShipPlaceable()) {
+                    leftValid = false;
+                }
+            }
+        }
+
+        // If all directions are invalid return false
+        if(!leftValid && !rightValid && !upValid && !downValid){
+            return false;
+        }
+
+        System.out.println("Right: " + rightValid);
+        System.out.println("Left: " + leftValid);
+        System.out.println("Down: " + downValid);
+        System.out.println("Up: " + upValid);
+
+        return true;
     }
 
-    /**
-     * // * Returns whether or not a position is a valid one
-     * // *
-     * // * Valid - At least one orientation in that initial pose will result in a
-     * legal
-     * // * position
-     * // *
-     * // * Logic- Checks above, below, left, and right of the initpose to make sure
-     * that
-     * // * is a point where
-     * // * the ship would fit
-     * // *
-     * // * Takes borders and other ships into account
-     * // *
-     * // * @return boolean value of true if its placeable and false if not
-     * //
-     */
-    // public boolean initPosFits(Coord pose, Grid grid) {
-    // rightValid = true;
-    // leftValid = true;
-    // upValid = true;
-    // downValid = true;
-
-    // int row = pose.getRow();
-    // int col = pose.getCol();
-
-    // possiblePose = 0;
-
-    // // Checks that the ship fits the bounds of the grid
-    // if (row + (length - 1) > 9) {
-    // downValid = false;
-    // }
-    // if (row - (length - 1) < 0) {
-    // upValid = false;
-    // }
-    // if (col - (length - 1) < 0) {
-    // leftValid = false;
-    // }
-    // if (col + (length - 1) > 9) {
-    // rightValid = false;
-    // }
-
-    // // Check right direction
-    // if (rightValid) {
-    // for (int i = 0; i < length; i++) {
-    // if (!grid.grid[row][col + i].getShipPlaceble()) {
-    // rightValid = false;
-    // possiblePose -= 1;
-    // }
-    // }
-    // }
-    // // Check up direction
-    // if (upValid) {
-    // for (int i = 0; i < length; i++) {
-    // if (!grid.grid[row - i][col].getShipPlaceble()) {
-    // upValid = false;
-    // possiblePose -= 1;
-    // break;
-    // }
-    // }
     // }
     // // Check down direction
     // if (downValid) {

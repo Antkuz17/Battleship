@@ -7,16 +7,10 @@ public class Ship {
     private boolean isSunk;
     private String vector; // From the initial pose does the ship point left right up down
 
-    private boolean rightValid = true;
-    private boolean leftValid = true;
-    private boolean upValid = true;
-    private boolean downValid = true;
-    private int possiblePoses;
-
-    private boolean againstRightWall = false;
-    private boolean againstLeftWall = false;
-    private boolean againstTopWall = false;
-    private boolean againstBottomWall = false;
+    // private boolean againstRightWall = false;
+    // private boolean againstLeftWall = false;
+    // private boolean againstTopWall = false;
+    // private boolean againstBottomWall = false;
 
     public Ship(int length) {
         this.length = length;
@@ -54,14 +48,12 @@ public class Ship {
 
         int[] coords = Utils.translation(potentialPos);
 
-        // Checks whether or not the coordinate is on the grid, if its a valid coordinate, and if the ship would fit
-        // while (!Utils.isOnGrid(potentialPos)|| !initPosFits(initPos, grid) || grid) { 
-        //                                                                                 // inputs a valid square
-        //     System.out.println("Not a valid position try again");
-        //     System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
-        //     potentialPos = input.nextLine();
-        //     initPos = translation(potentialPos); // Translates the string to a coord object
-        // }
+        //Checks whether or not the coordinate is on the grid, if its a valid coordinate, and if the ship would fit in one of 4 poses
+        while (!Utils.isOnGrid(potentialPos) || !Utils.posFits(grid, length, potentialPos)) { 
+            System.out.println("Not a valid position try again");
+            System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
+            potentialPos = input.nextLine();
+        }
 
 //         // Validading ship against take squares
 
