@@ -116,7 +116,7 @@ public class Utils {
      * @param grid   The grid that is being checked
      * @param Length The length of the ship
      * @param coord  The coordinate where the ship stars
-     * @return Returns a true value if the ship would fit and false if it doesnt
+     * @return Returns a int value if depending on the number of valid positions
      */
     public static int posFits(Grid grid, int length, String coord) {
 
@@ -147,7 +147,7 @@ public class Utils {
             leftValid = false;
             directionCounter++;
         }
-        if (col + (length - 1) > 9) {
+        if (row + (length - 1) > 9) {
             downValid = false;
             directionCounter++;
         }
@@ -162,7 +162,7 @@ public class Utils {
 
         // Checking right direction
         if (rightValid) {
-            for (int i = 0; i < length; i++) {
+            for (int i = 1; i < length; i++) {
                 if (!grid.getCell(row, col + i).getShipPlaceable()) {
                     rightValid = false;
                 }
@@ -219,6 +219,7 @@ public class Utils {
         if (downValid) {
             counter++;
         }
+        System.out.println("Counter:" + counter);
         return counter;
     }
 
@@ -237,7 +238,7 @@ public class Utils {
         int row = arrayCoords[0];
         int col = arrayCoords[1];
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 1; i < length; i++) {
             if (!grid.getCell(row, col + i).getShipPlaceable()) {
                 return false;
             }
@@ -261,7 +262,7 @@ public class Utils {
         int row = arrayCoords[0];
         int col = arrayCoords[1];
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 1; i < length; i++) {
             if (!grid.getCell(row, col - i).getShipPlaceable()) {
                 return false;
             }
@@ -285,7 +286,7 @@ public class Utils {
         int row = arrayCoords[0];
         int col = arrayCoords[1];
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 1; i < length; i++) {
             if (!grid.getCell(row - i, col).getShipPlaceable()) {
                 return false;
             }
@@ -309,7 +310,7 @@ public class Utils {
         int row = arrayCoords[0];
         int col = arrayCoords[1];
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 1; i < length; i++) {
             if (!grid.getCell(row + i, col).getShipPlaceable()) {
                 return false;
             }

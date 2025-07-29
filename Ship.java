@@ -54,13 +54,14 @@ public class Ship {
             System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
             potentialPos = input.nextLine();
         }
+        // Number of possible positions that the ship can take
+        int possiblePoses = Utils.posFits(grid, length, potentialPos);
 
         // Setting the start coord as having a ship and not being able to place ships on it
         grid.getCell(coords[0], coords[1]).setHasShip(true);
         grid.getCell(coords[0], coords[1]).setShipPlacable(false);
 
-        // Number of possible positions that the ship can take
-        int possiblePoses = Utils.posFits(grid, length, potentialPos);
+
 
         // If only one possible position dont ask the user if they want to rotate
         String userAnswer = "R";
@@ -68,137 +69,145 @@ public class Ship {
             userAnswer = "";
         }
 
+        System.out.println("PP" + possiblePoses);
+
         // Will keep rotating until the user inputs not R
         while (userAnswer.equals("R")) {
-            if (rightValid) {
+            if (Utils.rightValid(grid, length, potentialPos)) { // If the right direction is valid 
+
+                //Make the ship on the grid, adding the coordinates the grid
                 for (int i = 1; i < (length); i++) {
-                    grid.grid[initPos.getRow()][initPos.getCol() + i].setHasShip(true);
+                    grid.getCell(coords[0], coords[1] + i).setHasShip(true);
                 }
                 grid.drawGrid();
-                System.out.print("Enter R to rotate ship(if not click anyother key): ");
-                userAnswer = input.nextLine();
-                if (!userAnswer.equalsIgnoreCase("R")) {
-                    vector = "right";
-                    for (int i = 0; i < (length + 2); i++) {
-                        int targetCol = initPos.getCol() + i -1;
-                        int topRow = initPos.getRow() + 1;
-                        int bottomRow = initPos.getRow() - 1;
 
-                        if (targetCol >= 0 && targetCol <= 9) {
-                            grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
+                break;
+                // System.out.print("Enter R to rotate ship(if not click anyother key): ");
+                // userAnswer = input.nextLine();
+                // if (!userAnswer.equalsIgnoreCase("R")) {
 
-                            if (topRow <= 9) {
-                                grid.grid[topRow][targetCol].setShipPlacable(false);
-                            }
+                //     for (int i = 0; i < (length + 2); i++) {
+                //         int targetCol = initPos.getCol() + i -1;
+                //         int topRow = initPos.getRow() + 1;
+                //         int bottomRow = initPos.getRow() - 1;
 
-                            if (bottomRow >= 0) {
-                                grid.grid[bottomRow][targetCol].setShipPlacable(false);
-                            }
-                        }
-                    }
-                    break;
-                }
-                for (int i = 1; i < (length); i++) {
-                    grid.grid[initPos.getRow()][initPos.getCol() + i].setHasShip(false);
-                }
-            }
-            if (downValid) {
-                for (int i = 1; i < (length); i++) {
-                    grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(true);
-                }
-                grid.drawGrid();
-                System.out.print("Enter R to rotate ship(if not click anyother key): ");
-                userAnswer = input.nextLine();
-                if (!userAnswer.equalsIgnoreCase("R")) {
-                    vector = "down";
-                    for (int i = 1; i < (length + 3); i++) {
-                        int targetRow = initPos.getRow() - 2 + i;
-                        int leftCol = initPos.getCol() - 1;
-                        int rightCol = initPos.getCol() + 1;
-                        if (targetRow >= 0 && targetRow < grid.grid.length) {
-                            grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
+                //         if (targetCol >= 0 && targetCol <= 9) {
+                //             grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
 
-                            if (leftCol >= 0) {
-                                grid.grid[targetRow][leftCol].setShipPlacable(false);
-                            }
+                //             if (topRow <= 9) {
+                //                 grid.grid[topRow][targetCol].setShipPlacable(false);
+                //             }
 
-                            if (rightCol < 9) {
-                                grid.grid[targetRow][rightCol].setShipPlacable(false);
-                            }
-                        }
-                    }
-                    break;
-                }
-                for (int i = 1; i < (length); i++) {
-                    grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(false);
-                }
-            }
-            if (leftValid) {
-                for (int i = 1; i < (length); i++) {
-                    grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(true);
-                }
-                grid.drawGrid();
-                System.out.print("Enter R to rotate ship(if not click anyother key): ");
-                userAnswer = input.nextLine();
-                if (!userAnswer.equalsIgnoreCase("R")) {
-                    vector = "left";
-                    for (int i = 0; i < (length + 2); i++) {
-                        int targetCol = initPos.getCol() - length + i;
-                        int topRow = initPos.getRow() + 1;
-                        int bottomRow = initPos.getRow() - 1;
-
-                        if (targetCol >= 0 && targetCol <= 9) {
-                            grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
-
-                            if (topRow <= 9) {
-                                grid.grid[topRow][targetCol].setShipPlacable(false);
-                            }
-
-                            if (bottomRow >= 0) {
-                                grid.grid[bottomRow][targetCol].setShipPlacable(false);
-                            }
-                        }
-                    }
-                    break;
-                }
-                for (int i = 1; i < (length); i++) {
-                    grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(false);
-                }
-            }
-            if (upValid) {
-                for (int i = 1; i < (length); i++) {
-                    grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(true);
-                }
-                grid.drawGrid();
-                System.out.print("Enter R to rotate ship(if not click anyother key): ");
-                userAnswer = input.nextLine();
-                if (!userAnswer.equalsIgnoreCase("R")) {
-                    vector = "up";
-                    for (int i = 0; i < (length + 2); i++) {
-                        int targetRow = initPos.getRow() - i +1;
-                        int leftCol = initPos.getCol() - 1;
-                        int rightCol = initPos.getCol() + 1;
-
-                        if (targetRow >= 0 && targetRow <= 9) {
-                            grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
-
-                            if (leftCol >= 0) {
-                                grid.grid[targetRow][leftCol].setShipPlacable(false);
-                            }
-
-                            if (rightCol <= 9) {
-                                grid.grid[targetRow][rightCol].setShipPlacable(false);
-                            }
-                        }
-                    }
-                    break;
-                }
-                for (int i = 1; i < (length); i++) {
-                    grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(false);
-                }
+                //             if (bottomRow >= 0) {
+                //                 grid.grid[bottomRow][targetCol].setShipPlacable(false);
+                //             }
+                //         }
+                //     }
+                //     break;
+                // }
+                // for (int i = 1; i < (length); i++) {
+                //     grid.grid[initPos.getRow()][initPos.getCol() + i].setHasShip(false);
+                // }
             }
         }
     }
+        //     if (downValid) {
+        //         for (int i = 1; i < (length); i++) {
+        //             grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(true);
+        //         }
+        //         grid.drawGrid();
+        //         System.out.print("Enter R to rotate ship(if not click anyother key): ");
+        //         userAnswer = input.nextLine();
+        //         if (!userAnswer.equalsIgnoreCase("R")) {
+        //             vector = "down";
+        //             for (int i = 1; i < (length + 3); i++) {
+        //                 int targetRow = initPos.getRow() - 2 + i;
+        //                 int leftCol = initPos.getCol() - 1;
+        //                 int rightCol = initPos.getCol() + 1;
+        //                 if (targetRow >= 0 && targetRow < grid.grid.length) {
+        //                     grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
+
+        //                     if (leftCol >= 0) {
+        //                         grid.grid[targetRow][leftCol].setShipPlacable(false);
+        //                     }
+
+        //                     if (rightCol < 9) {
+        //                         grid.grid[targetRow][rightCol].setShipPlacable(false);
+        //                     }
+        //                 }
+        //             }
+        //             break;
+        //         }
+        //         for (int i = 1; i < (length); i++) {
+        //             grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(false);
+        //         }
+        //     }
+        //     if (leftValid) {
+        //         for (int i = 1; i < (length); i++) {
+        //             grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(true);
+        //         }
+        //         grid.drawGrid();
+        //         System.out.print("Enter R to rotate ship(if not click anyother key): ");
+        //         userAnswer = input.nextLine();
+        //         if (!userAnswer.equalsIgnoreCase("R")) {
+        //             vector = "left";
+        //             for (int i = 0; i < (length + 2); i++) {
+        //                 int targetCol = initPos.getCol() - length + i;
+        //                 int topRow = initPos.getRow() + 1;
+        //                 int bottomRow = initPos.getRow() - 1;
+
+        //                 if (targetCol >= 0 && targetCol <= 9) {
+        //                     grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
+
+        //                     if (topRow <= 9) {
+        //                         grid.grid[topRow][targetCol].setShipPlacable(false);
+        //                     }
+
+        //                     if (bottomRow >= 0) {
+        //                         grid.grid[bottomRow][targetCol].setShipPlacable(false);
+        //                     }
+        //                 }
+        //             }
+        //             break;
+        //         }
+        //         for (int i = 1; i < (length); i++) {
+        //             grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(false);
+        //         }
+        //     }
+        //     if (upValid) {
+        //         for (int i = 1; i < (length); i++) {
+        //             grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(true);
+        //         }
+        //         grid.drawGrid();
+        //         System.out.print("Enter R to rotate ship(if not click anyother key): ");
+        //         userAnswer = input.nextLine();
+        //         if (!userAnswer.equalsIgnoreCase("R")) {
+        //             vector = "up";
+        //             for (int i = 0; i < (length + 2); i++) {
+        //                 int targetRow = initPos.getRow() - i +1;
+        //                 int leftCol = initPos.getCol() - 1;
+        //                 int rightCol = initPos.getCol() + 1;
+
+        //                 if (targetRow >= 0 && targetRow <= 9) {
+        //                     grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
+
+        //                     if (leftCol >= 0) {
+        //                         grid.grid[targetRow][leftCol].setShipPlacable(false);
+        //                     }
+
+        //                     if (rightCol <= 9) {
+        //                         grid.grid[targetRow][rightCol].setShipPlacable(false);
+        //                     }
+        //                 }
+        //             }
+        //             break;
+        //         }
+        //         for (int i = 1; i < (length); i++) {
+        //             grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(false);
+        //         }
+        //     }
+        // }
+    //}
 
 //     /**
 //      * Sets the wall boundaries for a given position initial pose
@@ -507,5 +516,6 @@ public class Ship {
 //     }
 
 // }
+    
     }
-}
+ 
