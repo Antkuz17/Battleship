@@ -70,6 +70,7 @@ public class Cell {
      * If the cell has been shot but no ship, then it will return M meaning Miss
      * If the cell has been shot and there was a ship, then it will return H meaning Hit
      * If the cell has a ship then is will return S meaning Ship
+     * 
      */
     @Override
     public String toString(){
@@ -81,6 +82,9 @@ public class Cell {
         }
         if (wasShot) {
             return " M ";
+        }
+        if (!shipPlaceable) {
+            return " I ";
         }
 
         return "   ";

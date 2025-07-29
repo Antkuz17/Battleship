@@ -24,7 +24,7 @@ public class Game {
 
         System.out.println("You have 5 ships of different lengths (length 2-6)");
 
-        humanPlayer.ship1.placeShip(humanPlayer.myGrid);
+        humanPlayer.ship4.placeShip(humanPlayer.myGrid);
         // Ship ship1 = new Ship(2);
         // ship1.placeShip(grid);
 
