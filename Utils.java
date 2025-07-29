@@ -105,19 +105,20 @@ public class Utils {
     }
 
     /**
-     * Returns a boolean value depending on whether a ship would fit at the given
+     * Returns a int value depending on whether a ship would fit at the given
      * coord. This method
      * will check whether given a start coord, a ship would fit in any direction
      * (up, down, left, right)
      * Takes borders and other ships into account.
-     * Assumes that the initial position is on the board
+     * Assumes that the initial position is on the board.
+     * Returns 0 if no poses, or 1-4 depending on how many poses work
      * 
      * @param grid   The grid that is being checked
      * @param Length The length of the ship
      * @param coord  The coordinate where the ship stars
      * @return Returns a true value if the ship would fit and false if it doesnt
      */
-    public static boolean posFits(Grid grid, int length, String coord) {
+    public static int posFits(Grid grid, int length, String coord) {
 
         int[] arrayCoords = Utils.translation(coord); // Takes string and converts it to an array of 2 coords
 
@@ -153,9 +154,8 @@ public class Utils {
 
         // If all four directions dont fit return false
         if (directionCounter == 4) {
-            return false;
+            return 0;
         }
-
 
         // Checking for intersections with other ships using for loops to iterate that
         // many times in all directions
@@ -197,8 +197,8 @@ public class Utils {
         }
 
         // If all directions are invalid return false
-        if(!leftValid && !rightValid && !upValid && !downValid){
-            return false;
+        if (!leftValid && !rightValid && !upValid && !downValid) {
+            return 0;
         }
 
         System.out.println("Right: " + rightValid);
@@ -206,39 +206,114 @@ public class Utils {
         System.out.println("Down: " + downValid);
         System.out.println("Up: " + upValid);
 
+        int counter = 0;
+        if (rightValid) {
+            counter++;
+        }
+        if (leftValid) {
+            counter++;
+        }
+        if (upValid) {
+            counter++;
+        }
+        if (downValid) {
+            counter++;
+        }
+        return counter;
+    }
+
+
+    /**
+     * Gives a boolean of whether the right direction would fit the ship given the starting coordinate
+     * @param grid The grid being placed on
+     * @param length Length of ship
+     * @param coord Start coordinate of the ship
+     * @return True if it does fit and false if it doesnt
+     */
+    public static Boolean rightValid(Grid grid, int length, String coord) {
+
+        int[] arrayCoords = Utils.translation(coord); // Takes string and converts it to an array of 2 coords
+
+        int row = arrayCoords[0];
+        int col = arrayCoords[1];
+
+        for (int i = 0; i < length; i++) {
+            if (!grid.getCell(row, col + i).getShipPlaceable()) {
+                return false;
+            }
+        }
         return true;
     }
 
-    // }
-    // // Check down direction
-    // if (downValid) {
-    // for (int i = 0; i < length; i++) {
-    // if (!grid.grid[row + i][col].getShipPlaceble()) {
-    // downValid = false;
-    // possiblePose -= 1;
-    // break;
-    // }
-    // }
-    // }
-    // // Check left direction
-    // if (leftValid) {
-    // for (int i = 0; i < length; i++) {
-    // if (!grid.grid[row][col - i].getShipPlaceble()) {
-    // leftValid = false;
-    // possiblePose -= 1;
-    // break;
-    // }
-    // }
-    // }
-    // if (downValid == false && upValid == false && leftValid == false &&
-    // rightValid == false) {
-    // return false;
-    // }
-    // System.out.println("Right Valid: " + rightValid);
-    // System.out.println("Left Valid: " + leftValid);
-    // System.out.println("Up Valid: " + upValid);
-    // System.out.println("Down Valid" + downValid);
-    // return true;
-    // }
+    /**
+     * Gives a boolean of whether the left direction would fit the ship given the
+     * starting coordinate
+     * 
+     * @param grid   The grid being placed on
+     * @param length Length of ship
+     * @param coord  Start coordinate of the ship
+     * @return True if it does fit and false if it doesnt
+     */
+    public static Boolean leftValid(Grid grid, int length, String coord) {
 
+        int[] arrayCoords = Utils.translation(coord); // Takes string and converts it to an array of 2 coords
+
+        int row = arrayCoords[0];
+        int col = arrayCoords[1];
+
+        for (int i = 0; i < length; i++) {
+            if (!grid.getCell(row, col - i).getShipPlaceable()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Gives a boolean of whether the up direction would fit the ship given the
+     * starting coordinate
+     * 
+     * @param grid   The grid being placed on
+     * @param length Length of ship
+     * @param coord  Start coordinate of the ship
+     * @return True if it does fit and false if it doesnt
+     */
+    public static Boolean upValid(Grid grid, int length, String coord) {
+
+        int[] arrayCoords = Utils.translation(coord); // Takes string and converts it to an array of 2 coords
+
+        int row = arrayCoords[0];
+        int col = arrayCoords[1];
+
+        for (int i = 0; i < length; i++) {
+            if (!grid.getCell(row - i, col).getShipPlaceable()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Gives a boolean of whether the down direction would fit the ship given the
+     * starting coordinate
+     * 
+     * @param grid   The grid being placed on
+     * @param length Length of ship
+     * @param coord  Start coordinate of the ship
+     * @return True if it does fit and false if it doesnt
+     */
+    public static Boolean downValid(Grid grid, int length, String coord) {
+
+        int[] arrayCoords = Utils.translation(coord); // Takes string and converts it to an array of 2 coords
+
+        int row = arrayCoords[0];
+        int col = arrayCoords[1];
+
+        for (int i = 0; i < length; i++) {
+            if (!grid.getCell(row + i, col).getShipPlaceable()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
