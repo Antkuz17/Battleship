@@ -83,9 +83,6 @@ public class Cell {
         if (wasShot) {
             return " M ";
         }
-        if (!shipPlaceable) {
-            return " I ";
-        }
 
         return "   ";
     }

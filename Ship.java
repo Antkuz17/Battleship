@@ -53,6 +53,7 @@ public class Ship {
             System.out.println("Not a valid position try again");
             System.out.println("Where do you want the " + (length - 1) + " ship to start?: ");
             potentialPos = input.nextLine();
+            coords = Utils.translation(potentialPos);
         }
         // Number of possible positions that the ship can take
         int possiblePoses = Utils.posFits(grid, length, potentialPos);
@@ -62,15 +63,11 @@ public class Ship {
         grid.getCell(coords[0], coords[1]).setHasShip(true);
         grid.getCell(coords[0], coords[1]).setShipPlacable(false);
 
-        // If only one possible position dont ask the user if they want to rotate
         String userAnswer = "R";
-        if (possiblePoses == 1) {
-            userAnswer = "";
-        }
 
         // Will keep rotating until the user inputs not R
         while (userAnswer.equals("R")) {
-            System.out.println("1");
+
             if (Utils.rightValid(grid, length, potentialPos)) { // If the right direction is valid
 
                 // Make the ship on the grid, adding the coordinates the grid
@@ -79,11 +76,16 @@ public class Ship {
                     grid.getCell(coords[0], coords[1] + i).setShipPlacable(false);
                 }
 
+                // Draws the grid for the user without the invalid squares (troubleshooting
+                // purposes)
                 System.out.println("Grid with just ship:");
                 grid.drawGrid();
 
                 System.out.print("Enter R to rotate ship(if not click anyother key): ");
                 userAnswer = input.nextLine();
+
+                // If the user does not enter R, then they dont want to rotate the ship and this
+                // will be the final position
                 if (!userAnswer.equalsIgnoreCase("R")) {
                     for (int i = 0; i < (length + 2); i++) {
                         int targetCol = coords[1] + i - 1;
@@ -106,16 +108,19 @@ public class Ship {
                     grid.drawGrid();
                     break;
                 }
+
+                // If they do enter R, then they dont want this position and so the program will
+                // set the coordinates back to normal
                 for (int i = 1; i < (length); i++) {
                     grid.getCell(coords[0], coords[1] + i).setHasShip(false);
                     grid.getCell(coords[0], coords[1] + i).setShipPlacable(true);
                 }
-                
+
             }
-            System.out.println("2");
+
             // Down direction
             if (Utils.downValid(grid, length, potentialPos)) {
-                
+
                 for (int i = 1; i < length; i++) {
                     grid.getCell(coords[0] + i, coords[1]).setHasShip(true);
                     grid.getCell(coords[0] + i, coords[1]).setShipPlacable(false);
@@ -153,10 +158,10 @@ public class Ship {
                     grid.getCell(coords[0] + i, coords[1]).setShipPlacable(true);
                 }
             }
-            System.out.println("3");
+
             // Left direction
             if (Utils.leftValid(grid, length, potentialPos)) {
-                
+
                 for (int i = 1; i < length; i++) {
                     grid.getCell(coords[0], coords[1] - i).setHasShip(true);
                     grid.getCell(coords[0], coords[1] - i).setShipPlacable(false);
@@ -195,8 +200,6 @@ public class Ship {
                 }
             }
 
-
-            System.out.println("4");
             // Up Direciton
             if (Utils.upValid(grid, length, potentialPos)) {
 
@@ -240,415 +243,162 @@ public class Ship {
 
         }
     }
-    // if (downValid) {
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(true);
-    // }
-    // grid.drawGrid();
-    // System.out.print("Enter R to rotate ship(if not click anyother key): ");
-    // userAnswer = input.nextLine();
-    // if (!userAnswer.equalsIgnoreCase("R")) {
-    // vector = "down";
-    // for (int i = 1; i < (length + 3); i++) {
-    // int targetRow = initPos.getRow() - 2 + i;
-    // int leftCol = initPos.getCol() - 1;
-    // int rightCol = initPos.getCol() + 1;
-    // if (targetRow >= 0 && targetRow < grid.grid.length) {
-    // grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
 
-    // if (leftCol >= 0) {
-    // grid.grid[targetRow][leftCol].setShipPlacable(false);
-    // }
+    /**
+     * Used to place ships on the AI's grid. Works by generating random coords.
+     * Then once you have one, checks if its a valid coordinate and if it is, place
+     * the ship there in a random direction
+     * 
+     * @param grid The AI's own ship grid
+     */
+    public void placeAiShip(Grid grid) {
 
-    // if (rightCol < 9) {
-    // grid.grid[targetRow][rightCol].setShipPlacable(false);
-    // }
-    // }
-    // }
-    // break;
-    // }
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(false);
-    // }
-    // }
-    // if (leftValid) {
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(true);
-    // }
-    // grid.drawGrid();
-    // System.out.print("Enter R to rotate ship(if not click anyother key): ");
-    // userAnswer = input.nextLine();
-    // if (!userAnswer.equalsIgnoreCase("R")) {
-    // vector = "left";
-    // for (int i = 0; i < (length + 2); i++) {
-    // int targetCol = initPos.getCol() - length + i;
-    // int topRow = initPos.getRow() + 1;
-    // int bottomRow = initPos.getRow() - 1;
+        String potentialPos = Utils.generateRandCoord(); // Potential position still needs to be checked for validity
 
-    // if (targetCol >= 0 && targetCol <= 9) {
-    // grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
+        int[] coords = Utils.translation(potentialPos); // Turns the potential pose to a set of ints
 
-    // if (topRow <= 9) {
-    // grid.grid[topRow][targetCol].setShipPlacable(false);
-    // }
+        // Checks whether or not the coordinate is on the grid, if its a valid
+        // coordinate, and if the ship would fit in one of 4 positions
+        while (!Utils.isOnGrid(potentialPos) || Utils.posFits(grid, length, potentialPos) == 0) {
+            potentialPos = Utils.generateRandCoord();
+            coords = Utils.translation(potentialPos);
+        }
 
-    // if (bottomRow >= 0) {
-    // grid.grid[bottomRow][targetCol].setShipPlacable(false);
-    // }
-    // }
-    // }
-    // break;
-    // }
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(false);
-    // }
-    // }
-    // if (upValid) {
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(true);
-    // }
-    // grid.drawGrid();
-    // System.out.print("Enter R to rotate ship(if not click anyother key): ");
-    // userAnswer = input.nextLine();
-    // if (!userAnswer.equalsIgnoreCase("R")) {
-    // vector = "up";
-    // for (int i = 0; i < (length + 2); i++) {
-    // int targetRow = initPos.getRow() - i +1;
-    // int leftCol = initPos.getCol() - 1;
-    // int rightCol = initPos.getCol() + 1;
+        // Number of possible positions that the ship can take
+        int possiblePoses = Utils.posFits(grid, length, potentialPos);
 
-    // if (targetRow >= 0 && targetRow <= 9) {
-    // grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
+        // Setting the start coord as having a ship and not being able to place ships on
+        // it
+        grid.getCell(coords[0], coords[1]).setHasShip(true);
+        grid.getCell(coords[0], coords[1]).setShipPlacable(false);
 
-    // if (leftCol >= 0) {
-    // grid.grid[targetRow][leftCol].setShipPlacable(false);
-    // }
 
-    // if (rightCol <= 9) {
-    // grid.grid[targetRow][rightCol].setShipPlacable(false);
-    // }
-    // }
-    // }
-    // break;
-    // }
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(false);
-    // }
-    // }
-    // }
-    // }
+        // Will keep rotating until the user inputs not R
+        while (true) {
+            // Used to randomize a direction for the ship
+            int num = (int) (Math.random() * 4) + 1;
 
-    // /**
-    // * Sets the wall boundaries for a given position initial pose
-    // *
-    // * Used to avoid indexout of bounds errors when setting adjacent squares to
-    // * invalid
-    // *
-    // * @param pose
-    // */
-    // public void setWallBounds(Coord pose) {
-    // if (pose.getCol() == 0) {
-    // againstLeftWall = true;
-    // }
-    // if (pose.getCol() == 9) {
-    // againstRightWall = true;
-    // }
-    // if (pose.getRow() == 0) {
-    // againstTopWall = true;
-    // }
-    // if (pose.getRow() == 0) {
-    // againstBottomWall = true;
-    // }
-    // }
+            if (num == 1) {
+                if (Utils.rightValid(grid, length, potentialPos)) { // If the right direction is valid
+                    // Make the ship on the grid, adding the coordinates the grid
+                    for (int i = 1; i < (length); i++) {
+                        grid.getCell(coords[0], coords[1] + i).setHasShip(true);
+                        grid.getCell(coords[0], coords[1] + i).setShipPlacable(false);
+                    }
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetCol = coords[1] + i - 1;
+                        int topRow = coords[0] - 1;
+                        int bottomRow = coords[0] + 1;
 
-    // /**
-    // * Returns whether or not a position is a valid one
-    // *
-    // * Valid - At least one orientation in that initial pose will result in a
-    // legal
-    // * position
-    // *
-    // * Logic- Checks above, below, left, and right of the initpose to make sure
-    // that
-    // * is a point where
-    // * the ship would fit
-    // *
-    // * Takes borders and other ships into account
-    // *
-    // * @return boolean value of true if its placeable and false if not
-    // */
-    // public boolean initPosFits(Coord pose, Grid grid) {
-    // rightValid = true;
-    // leftValid = true;
-    // upValid = true;
-    // downValid = true;
+                        if (targetCol >= 0 && targetCol <= 9) {
+                            grid.getCell(coords[0], targetCol).setShipPlacable(false);
 
-    // int row = pose.getRow();
-    // int col = pose.getCol();
+                            if (topRow >= 0) {
+                                grid.getCell(topRow, targetCol).setShipPlacable(false);
+                            }
 
-    // possiblePose = 0;
+                            if (bottomRow <= 9) {
+                                grid.getCell(bottomRow, targetCol).setShipPlacable(false);
+                            }
+                        }
+                    }
+                    System.out.println("AI ship placed going RIGHT");
+                    grid.drawGrid();
+                    break;
+                }
+            }
 
-    // // Checks that the ship fits the bounds of the grid
-    // if (row + (length - 1) > 9) {
-    // downValid = false;
-    // }
-    // if (row - (length - 1) < 0) {
-    // upValid = false;
-    // }
-    // if (col - (length - 1) < 0) {
-    // leftValid = false;
-    // }
-    // if (col + (length - 1) > 9) {
-    // rightValid = false;
-    // }
+            if (num == 2) {
+                if (Utils.downValid(grid, length, potentialPos)) { // If the down direction is valid
+                    // Make the ship on the grid, adding the coordinates the grid
+                    for (int i = 1; i < (length); i++) {
+                        grid.getCell(coords[0] + i, coords[1]).setHasShip(true);
+                        grid.getCell(coords[0] + i, coords[1]).setShipPlacable(false);
+                    }
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetRow = coords[0] + i - 1;
+                        int leftCol = coords[1] - 1;
+                        int rightCol = coords[1] + 1;
 
-    // // Check right direction
-    // if (rightValid) {
-    // for (int i = 0; i < length; i++) {
-    // if (!grid.grid[row][col + i].getShipPlaceble()) {
-    // rightValid = false;
-    // possiblePose -= 1;
-    // }
-    // }
-    // }
-    // // Check up direction
-    // if (upValid) {
-    // for (int i = 0; i < length; i++) {
-    // if (!grid.grid[row - i][col].getShipPlaceble()) {
-    // upValid = false;
-    // possiblePose -= 1;
-    // break;
-    // }
-    // }
-    // }
-    // // Check down direction
-    // if (downValid) {
-    // for (int i = 0; i < length; i++) {
-    // if (!grid.grid[row + i][col].getShipPlaceble()) {
-    // downValid = false;
-    // possiblePose -= 1;
-    // break;
-    // }
-    // }
-    // }
-    // // Check left direction
-    // if (leftValid) {
-    // for (int i = 0; i < length; i++) {
-    // if (!grid.grid[row][col - i].getShipPlaceble()) {
-    // leftValid = false;
-    // possiblePose -= 1;
-    // break;
-    // }
-    // }
-    // }
-    // if (downValid == false && upValid == false && leftValid == false &&
-    // rightValid == false) {
-    // return false;
-    // }
-    // System.out.println("Right Valid: " + rightValid);
-    // System.out.println("Left Valid: " + leftValid);
-    // System.out.println("Up Valid: " + upValid);
-    // System.out.println("Down Valid" + downValid);
-    // return true;
-    // }
+                        if (targetRow >= 0 && targetRow <= 9) {
+                            grid.getCell(targetRow, coords[1]).setShipPlacable(false);
 
-    // /**
-    // * Returns a true or false depending on whether the given coordinate is on the
-    // * grid and isnt on a invalid square
-    // * For example if a ship is at A1, A2 is an invalid square
-    // *
-    // * This method will consider only that the init square is in bounds and its
-    // not
-    // * on an invalid square
-    // *
-    // * @return Return true if on grid and false if the coord is off grid
-    // */
-    // public boolean isOnGridNotOnOtherShip(Coord coord, Grid grid) {
-    // if (coord.getCol() > 9 || coord.getCol() < 0 || coord.getRow() > 9 ||
-    // coord.getRow() < 0
-    // || grid.grid[coord.getRow()][coord.getCol()].getShipPlaceble() == false) {
-    // return false;
-    // }
-    // return true;
-    // }
+                            if (leftCol >= 0) {
+                                grid.getCell(targetRow, leftCol).setShipPlacable(false);
+                            }
 
-    // /**
-    // * Translates a user input into grid coords
-    // *
-    // * For example A1 is turned into 0,0 or J10 is turned into 9,9
-    // *
-    // * @param pos The user string input like "A1"
-    // * @return An coordinate object with the translated coords
-    // */
+                            if (rightCol <= 9) {
+                                grid.getCell(targetRow, rightCol).setShipPlacable(false);
+                            }
+                        }
+                    }
+                    System.out.println("AI ship placed going DOWN");
+                    grid.drawGrid();
+                    break;
+                }
+            }
 
-    // public Coord translation(String pos) {
-    // char firstLetter = pos.charAt(0);
-    // int firstNumber = Character.getNumericValue(firstLetter) - 10;
-    // int secondNumber;
-    // if (Integer.parseInt(pos.substring(1)) > 10) {
-    // secondNumber = 11;
-    // } else if (Integer.parseInt(pos.substring(1)) == 10) {
-    // secondNumber = 9;
-    // } else {
-    // secondNumber = Character.getNumericValue(pos.charAt(1)) - 1;
-    // }
-    // System.out.println("First Number: " + firstNumber);
-    // System.out.println("Second Number: " + secondNumber);
-    // Coord initPos = new Coord(firstNumber, secondNumber);
-    // return initPos;
-    // }
-    // /**
-    // * Will add a ship to the Ai's grid
-    // *
-    // * Init pos is randomized until a valid pose is found then it will randomly
-    // add the ship in a random position
-    // * @param grid
-    // */
-    // public void placeAiShip(Grid grid){
-    // int[] arrayCoord = genRandCoord();
-    // int x = arrayCoord[0];
-    // int y = arrayCoord[1];
-    // Coord initPos = new Coord(x, y);
-    // while (!isOnGridNotOnOtherShip(initPos, grid) || !initPosFits(initPos, grid))
-    // { // Keep regenerating till valid pose
-    // //System.out.println("initPosFits: " + initPosFits(initPos, grid));
-    // //System.out.println("isOnGridNotOnOtherShip" +
-    // isOnGridNotOnOtherShip(initPos,grid));
-    // arrayCoord = genRandCoord();
-    // x = arrayCoord[0];
-    // y = arrayCoord[1];
+            if (num == 3) {
+                if (Utils.leftValid(grid, length, potentialPos)) { // If the left direction is valid
+                    // Make the ship on the grid, adding the coordinates the grid
+                    for (int i = 1; i < (length); i++) {
+                        grid.getCell(coords[0], coords[1] - i).setHasShip(true);
+                        grid.getCell(coords[0], coords[1] - i).setShipPlacable(false);
+                    }
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetCol = coords[1] - i + 1;
+                        int topRow = coords[0] - 1;
+                        int bottomRow = coords[0] + 1;
 
-    // initPos = new Coord(x, y);
-    // }
+                        if (targetCol >= 0 && targetCol <= 9) {
+                            grid.getCell(coords[0], targetCol).setShipPlacable(false);
 
-    // initPos.setHasShip(true);
-    // initPos.setShipPlacable(false);
+                            if (topRow >= 0) {
+                                grid.getCell(topRow, targetCol).setShipPlacable(false);
+                            }
 
-    // // Setting the initial pose thats been validated as the initpos on the grid
-    // grid.grid[initPos.getRow()][initPos.getCol()] = initPos;
+                            if (bottomRow <= 9) {
+                                grid.getCell(bottomRow, targetCol).setShipPlacable(false);
+                            }
+                        }
+                    }
+                    System.out.println("AI ship placed going LEFT");
+                    grid.drawGrid();
+                    break;
+                }
+            }
 
-    // while (true) {
-    // int random = (int) (Math.random() * (4 - 1 + 1)) + 1;
-    // if (rightValid && random == 1) {
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow()][initPos.getCol() + i].setHasShip(true);
-    // }
+            if (num == 4) {
+                if (Utils.upValid(grid, length, potentialPos)) { // If the up direction is valid
+                    // Make the ship on the grid, adding the coordinates the grid
+                    for (int i = 1; i < (length); i++) {
+                        grid.getCell(coords[0] - i, coords[1]).setHasShip(true);
+                        grid.getCell(coords[0] - i, coords[1]).setShipPlacable(false);
+                    }
+                    for (int i = 0; i < (length + 2); i++) {
+                        int targetRow = coords[0] - i + 1;
+                        int leftCol = coords[1] - 1;
+                        int rightCol = coords[1] + 1;
 
-    // vector = "right";
-    // for (int i = 0; i < (length + 2); i++) {
-    // int targetCol = initPos.getCol() + i - 1;
-    // int topRow = initPos.getRow() + 1;
-    // int bottomRow = initPos.getRow() - 1;
+                        if (targetRow >= 0 && targetRow <= 9) {
+                            grid.getCell(targetRow, coords[1]).setShipPlacable(false);
 
-    // if (targetCol >= 0 && targetCol <= 9) {
-    // grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
+                            if (leftCol >= 0) {
+                                grid.getCell(targetRow, leftCol).setShipPlacable(false);
+                            }
 
-    // if (topRow <= 9) {
-    // grid.grid[topRow][targetCol].setShipPlacable(false);
-    // }
+                            if (rightCol <= 9) {
+                                grid.getCell(targetRow, rightCol).setShipPlacable(false);
+                            }
+                        }
+                    }
+                    System.out.println("AI ship placed going UP");
+                    grid.drawGrid();
+                    break;
+                }
+            }
+        }
 
-    // if (bottomRow >= 0) {
-    // grid.grid[bottomRow][targetCol].setShipPlacable(false);
-    // }
-    // }
-    // }
-    // break;
-    // }
-    // if (downValid && random ==2) {
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow() + i][initPos.getCol()].setHasShip(true);
-    // }
-
-    // vector = "down";
-    // for (int i = 1; i < (length + 3); i++) {
-    // int targetRow = initPos.getRow() - 2 + i;
-    // int leftCol = initPos.getCol() - 1;
-    // int rightCol = initPos.getCol() + 1;
-    // if (targetRow >= 0 && targetRow < grid.grid.length) {
-    // grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
-
-    // if (leftCol >= 0) {
-    // grid.grid[targetRow][leftCol].setShipPlacable(false);
-    // }
-
-    // if (rightCol < 9) {
-    // grid.grid[targetRow][rightCol].setShipPlacable(false);
-    // }
-    // }
-    // }
-    // break;
-    // }
-
-    // if (leftValid && random == 3) {
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow()][initPos.getCol() - i].setHasShip(true);
-    // }
-
-    // vector = "left";
-    // for (int i = 0; i < (length + 2); i++) {
-    // int targetCol = initPos.getCol() - length + i;
-    // int topRow = initPos.getRow() + 1;
-    // int bottomRow = initPos.getRow() - 1;
-
-    // if (targetCol >= 0 && targetCol <= 9) {
-    // grid.grid[initPos.getRow()][targetCol].setShipPlacable(false);
-
-    // if (topRow <= 9) {
-    // grid.grid[topRow][targetCol].setShipPlacable(false);
-    // }
-
-    // if (bottomRow >= 0) {
-    // grid.grid[bottomRow][targetCol].setShipPlacable(false);
-    // }
-    // }
-    // }
-    // break;
-    // }
-    // if (upValid && random == 4) {
-    // for (int i = 1; i < (length); i++) {
-    // grid.grid[initPos.getRow() - i][initPos.getCol()].setHasShip(true);
-    // }
-
-    // vector = "up";
-    // for (int i = 0; i < (length + 2); i++) {
-    // int targetRow = initPos.getRow() - i + 1;
-    // int leftCol = initPos.getCol() - 1;
-    // int rightCol = initPos.getCol() + 1;
-
-    // if (targetRow >= 0 && targetRow <= 9) {
-    // grid.grid[targetRow][initPos.getCol()].setShipPlacable(false);
-
-    // if (leftCol >= 0) {
-    // grid.grid[targetRow][leftCol].setShipPlacable(false);
-    // }
-
-    // if (rightCol <= 9) {
-    // grid.grid[targetRow][rightCol].setShipPlacable(false);
-    // }
-    // }
-    // }
-    // break;
-    // }
-
-    // }
-    // }
-
-    // /**
-    // * Generates a random set of coords
-    // *
-    // * ex (6,2) (0,9) (7,1)
-    // *
-    // * @return These numbers as a two element array
-    // */
-    // public int[] genRandCoord(){
-    // int[] nums = new int[2];
-    // for(int i =0; i< 2; i++){
-    // int random = (int) (Math.random() * 10);
-    // nums[i] = random;
-    // }
-    // return nums;
-    // }
-
-    // }
+    }
 
 }

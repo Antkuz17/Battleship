@@ -24,7 +24,17 @@ public class Game {
 
         System.out.println("You have 5 ships of different lengths (length 2-6)");
 
-        humanPlayer.ship4.placeShip(humanPlayer.myGrid);
+        // humanPlayer.ship1.placeShip(humanPlayer.myGrid);
+        // humanPlayer.ship2.placeShip(humanPlayer.myGrid);
+        // humanPlayer.ship3.placeShip(humanPlayer.myGrid);
+        // humanPlayer.ship4.placeShip(humanPlayer.myGrid);
+        // humanPlayer.ship5.placeShip(humanPlayer.myGrid);
+
+        AIPlayer.ship1.placeAiShip(AIPlayer.myGrid);
+        AIPlayer.ship2.placeAiShip(AIPlayer.myGrid);
+        AIPlayer.ship3.placeAiShip(AIPlayer.myGrid);
+        AIPlayer.ship4.placeAiShip(AIPlayer.myGrid);
+        AIPlayer.ship5.placeAiShip(AIPlayer.myGrid);
         // Ship ship1 = new Ship(2);
         // ship1.placeShip(grid);
 

@@ -39,35 +39,6 @@ public class Utils {
         return coord;
     }
 
-    // /**
-    // * Generates a random set of coords
-    // *
-    // * ex (6,2) (0,9) (7,1)
-    // *
-    // * @return These numbers as a two element array
-    // */
-    // public int[] genRandCoord(){
-    // int[] nums = new int[2];
-    // for(int i =0; i< 2; i++){
-    // int random = (int) (Math.random() * 10);
-    // nums[i] = random;
-    // }
-    // return nums;
-    // }
-    // /**
-    // * Gets a coordinate from the user in the from A1. Does validation to ensure
-    // that the inputed coordinate is on the grid
-    // * @return String version of the coordinate that has been validated
-    // */
-    // public String getCoord(){
-    // Boolean valid = true;
-    // String Coord;
-    // while(true){
-    // System.out.print("Enter a coordinate: ");
-    // Coord = input.nextLine();
-    // if(Coord.charAt(0))
-    // }
-    // }
 
     /**
      * Given a String coordinate, this method tells you whether or not it is on the
@@ -110,7 +81,7 @@ public class Utils {
      * will check whether given a start coord, a ship would fit in any direction
      * (up, down, left, right)
      * Takes borders and other ships into account.
-     * Assumes that the initial position is on the board.
+     * Assumes that the initial position is on the board. And checks if the initial pose is a valid one
      * Returns 0 if no poses, or 1-4 depending on how many poses work
      * 
      * @param grid   The grid that is being checked
@@ -130,7 +101,12 @@ public class Utils {
         Boolean downValid = true;
         Boolean leftValid = true;
 
-        int directionCounter = 0; // If = 4 then all 4 directions are invalid
+        int directionCounter = 0; // If = 4 then all 4 directions are invalid\
+
+        // If the initial position cant have a ship on it, return false
+        if(!grid.getCell(row, col).getShipPlaceable()){
+            return 0;
+        }
 
         // Checks the validity of each direciton with regard to the borders
         // Add's the length of the ship to the row and coloum and checks whether the
