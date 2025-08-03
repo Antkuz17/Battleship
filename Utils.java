@@ -177,11 +177,6 @@ public class Utils {
             return 0;
         }
 
-        System.out.println("Right: " + rightValid);
-        System.out.println("Left: " + leftValid);
-        System.out.println("Down: " + downValid);
-        System.out.println("Up: " + upValid);
-
         int counter = 0;
         if (rightValid) {
             counter++;
@@ -195,7 +190,7 @@ public class Utils {
         if (downValid) {
             counter++;
         }
-        System.out.println("Counter:" + counter);
+
         return counter;
     }
 
@@ -305,5 +300,10 @@ public class Utils {
         return false;
     }
         return true;
+    }
+
+
+    public static String getCoord(){
+        return input.nextLine();
     }
 }

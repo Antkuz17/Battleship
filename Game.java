@@ -21,69 +21,45 @@ public class Game {
         humanPlayer.myGrid.drawGrid();
 
         // Placing all the players ships
-
         System.out.println("You have 5 ships of different lengths (length 2-6)");
 
-        // humanPlayer.ship1.placeShip(humanPlayer.myGrid);
-        // humanPlayer.ship2.placeShip(humanPlayer.myGrid);
-        // humanPlayer.ship3.placeShip(humanPlayer.myGrid);
-        // humanPlayer.ship4.placeShip(humanPlayer.myGrid);
-        // humanPlayer.ship5.placeShip(humanPlayer.myGrid);
+        humanPlayer.ship1.placeShip(humanPlayer.myGrid);
+        humanPlayer.ship2.placeShip(humanPlayer.myGrid);
+        humanPlayer.ship3.placeShip(humanPlayer.myGrid);
+        humanPlayer.ship4.placeShip(humanPlayer.myGrid);
+        humanPlayer.ship5.placeShip(humanPlayer.myGrid);
 
+        // Placing all the AI's ships
         AIPlayer.ship1.placeAiShip(AIPlayer.myGrid);
         AIPlayer.ship2.placeAiShip(AIPlayer.myGrid);
         AIPlayer.ship3.placeAiShip(AIPlayer.myGrid);
         AIPlayer.ship4.placeAiShip(AIPlayer.myGrid);
         AIPlayer.ship5.placeAiShip(AIPlayer.myGrid);
-        // Ship ship1 = new Ship(2);
-        // ship1.placeShip(grid);
+        
+        AIPlayer.myGrid.drawGrid(); // For trouble shooting
 
-        // Ship ship2 = new Ship(3);
-        // ship2.placeShip(grid);
 
-        // Ship ship3 = new Ship(4);
-        // ship3.placeShip(grid);
+        // Main gaime loop
+        // Keeps running till either all of the players ships or the AI's ships are destroyed
+        boolean playerShipsDestroyed = false;
+        boolean aiShipsDestroyed = false;
+        while (!playerShipsDestroyed && !aiShipsDestroyed) {
+            // Player shooting
+            humanPlayer.shoot(AIPlayer.myGrid, humanPlayer.shotsGrid);
 
-        // Ship ship4 = new Ship(5);
-        // ship4.placeShip(grid);
+            // AI shooting
+            
 
-        // Ship ship5 = new Ship(6);
-        // ship5.placeShip(grid);
-
-        // // Placing AI Ships
-        // Ship aiShip1 = new Ship(2);
-        // aiShip1.placeAiShip(aiGrid);
-        // Ship aiShip2 = new Ship(3);
-        // aiShip2.placeAiShip(aiGrid);
-        // aiGrid.drawGrid();
-        // Ship aiShip3 = new Ship(4);
-        // aiShip3.placeAiShip(aiGrid);
-        // Ship aiShip4 = new Ship(5);
-        // aiShip4.placeAiShip(aiGrid);
-        // Ship aiShip5 = new Ship(6);
-        // aiShip5.placeAiShip(aiGrid);
-
-        // System.out.println("AI Grid: "); // will be deleted later just for trouble
-        // shooting
-        // aiGrid.drawGrid();
-
-        // // Main gaime loop
-        // // Keeps running till either all of the players ships or the AI's ships are
-        // // destroyed
-        // boolean playerShipsDestroyed = false;
-        // boolean aiShipsDestroyed = false;
-        // while (!playerShipsDestroyed && !aiShipsDestroyed) {
-        // aiGrid.playerShoot(aiGrid, playerShotsGrid); // Player shooting
-
-        // // All of the grids shown for testing purposes
-        // System.out.println("Players Grid:");
-        // grid.drawGrid();
-        // System.out.println("Players Shots Grid:");
-        // playerShotsGrid.drawGrid();
-        // System.out.println("Ais Grid Grid:");
-        // aiGrid.drawGrid();
-        // System.out.println("Ais shots Grid:");
-        // aiShotsGrid.drawGrid();
+            
+        // All of the grids shown for testing purposes
+        System.out.println("Players Grid:");
+        humanPlayer.myGrid.drawGrid();
+        System.out.println("Players Shots Grid:");
+        humanPlayer.shotsGrid.drawGrid();
+        System.out.println("Ais Grid Grid:");
+        AIPlayer.myGrid.drawGrid();
+        System.out.println("Ais shots Grid:");
+        AIPlayer.shotsGrid.drawGrid();
 
         // grid.playerShoot(grid, aiShotsGrid);
 
@@ -91,4 +67,5 @@ public class Game {
 
     }
 
+}
 }

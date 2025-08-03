@@ -1,7 +1,8 @@
-public class AIPlayer extends Player{
-    
-    Boolean huntMode = true; 
-    // If AI has no hits, hunt mode means semi random shots (wont shoot if the ship cant be there)
+public class AIPlayer extends Player {
+
+    Boolean huntMode = true;
+    // If AI has no hits, hunt mode means semi random shots (wont shoot if the ship
+    // cant be there)
     // Done by cross refrencing the currently active ships
 
     Boolean targetMode = false; // If AI got a hit, target mode uses logic to sink it
@@ -19,8 +20,7 @@ public class AIPlayer extends Player{
     Boolean SL4 = true;
     Boolean SL5 = true;
     Boolean SL6 = true;
-    
-    
+
     /**
      * Deals with all the logic surrounding the the ai's shooting
      * First an initial position is generated randomly. Then there is a shot and if
@@ -33,18 +33,27 @@ public class AIPlayer extends Player{
      * @param enemyGrid The grid of the player
      * @param shotsGrid The grid that tracks the AI's shots
      */
-    public void aiShoot(Grid enemyGrid, Grid shotsGrid) {
-        
-        // if(huntMode){
-        //     // Generate random coord
-        //     Coord guessCoord = translation(generateRandCoord()); // Random guess by the AI
-        //     if(guessCoord.getwasShot()){
+    public void shoot(Grid enemyGrid, Grid shotsGrid) {
 
-        //     }
-        // }
-        
+        String coord = Utils.generateRandCoord();
 
-    }
+        int[] arrCoords = Utils.translation(coord);
+
+        // Hunt mode means that the AI does not know the location of the next ship
+        if(huntMode){
+            // Keep regenerating until a valid coordinate is created
+            // Valid means a. hasnt been shot already, b. could fit a ship thats still alive
+            while (shotsGrid.getCell(arrCoords[0], arrCoords[1]).getWasShot() || ) {
+                coord = Utils.generateRandCoord();
+                arrCoords = Utils.translation(coord);
+            }
+
+            shotsGrid.getCell(arrCoords[0], arrCoords[1]).setWasShot(true);
+            enemyGrid.getCell(arrCoords[0], arrCoords[1]).setWasShot(true);
+        }
 
 
+}
+
+    
 }

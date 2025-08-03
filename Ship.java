@@ -264,9 +264,6 @@ public class Ship {
             coords = Utils.translation(potentialPos);
         }
 
-        // Number of possible positions that the ship can take
-        int possiblePoses = Utils.posFits(grid, length, potentialPos);
-
         // Setting the start coord as having a ship and not being able to place ships on
         // it
         grid.getCell(coords[0], coords[1]).setHasShip(true);
@@ -302,8 +299,7 @@ public class Ship {
                             }
                         }
                     }
-                    System.out.println("AI ship placed going RIGHT");
-                    grid.drawGrid();
+
                     break;
                 }
             }
@@ -332,8 +328,7 @@ public class Ship {
                             }
                         }
                     }
-                    System.out.println("AI ship placed going DOWN");
-                    grid.drawGrid();
+
                     break;
                 }
             }
@@ -362,8 +357,7 @@ public class Ship {
                             }
                         }
                     }
-                    System.out.println("AI ship placed going LEFT");
-                    grid.drawGrid();
+
                     break;
                 }
             }
@@ -392,8 +386,7 @@ public class Ship {
                             }
                         }
                     }
-                    System.out.println("AI ship placed going UP");
-                    grid.drawGrid();
+
                     break;
                 }
             }
