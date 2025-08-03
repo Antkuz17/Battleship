@@ -70,6 +70,7 @@ public class Ship {
 
         // Will keep rotating until the user inputs not R
         while (userAnswer.equals("R")) {
+            System.out.println("1");
             if (Utils.rightValid(grid, length, potentialPos)) { // If the right direction is valid
 
                 // Make the ship on the grid, adding the coordinates the grid
@@ -111,7 +112,7 @@ public class Ship {
                 }
                 
             }
-
+            System.out.println("2");
             // Down direction
             if (Utils.downValid(grid, length, potentialPos)) {
                 
@@ -152,7 +153,7 @@ public class Ship {
                     grid.getCell(coords[0] + i, coords[1]).setShipPlacable(true);
                 }
             }
-
+            System.out.println("3");
             // Left direction
             if (Utils.leftValid(grid, length, potentialPos)) {
                 
@@ -195,7 +196,7 @@ public class Ship {
             }
 
 
-
+            System.out.println("4");
             // Up Direciton
             if (Utils.upValid(grid, length, potentialPos)) {
 

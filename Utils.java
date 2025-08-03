@@ -223,12 +223,13 @@ public class Utils {
         return counter;
     }
 
-
     /**
-     * Gives a boolean of whether the right direction would fit the ship given the starting coordinate
-     * @param grid The grid being placed on
+     * Gives a boolean of whether the right direction would fit the ship given the
+     * starting coordinate
+     * 
+     * @param grid   The grid being placed on
      * @param length Length of ship
-     * @param coord Start coordinate of the ship
+     * @param coord  Start coordinate of the ship
      * @return True if it does fit and false if it doesnt
      */
     public static Boolean rightValid(Grid grid, int length, String coord) {
@@ -237,12 +238,15 @@ public class Utils {
 
         int row = arrayCoords[0];
         int col = arrayCoords[1];
-
+        try{
         for (int i = 1; i < length; i++) {
             if (!grid.getCell(row, col + i).getShipPlaceable()) {
                 return false;
             }
         }
+    }catch (ArrayIndexOutOfBoundsException e){
+        return false;
+    }
         return true;
     }
 
@@ -261,12 +265,15 @@ public class Utils {
 
         int row = arrayCoords[0];
         int col = arrayCoords[1];
-
+        try{
         for (int i = 1; i < length; i++) {
             if (!grid.getCell(row, col - i).getShipPlaceable()) {
                 return false;
             }
         }
+    }  catch(ArrayIndexOutOfBoundsException e){
+        return false;
+    }
         return true;
     }
 
@@ -285,12 +292,15 @@ public class Utils {
 
         int row = arrayCoords[0];
         int col = arrayCoords[1];
-
+        try{
         for (int i = 1; i < length; i++) {
             if (!grid.getCell(row - i, col).getShipPlaceable()) {
                 return false;
             }
         }
+    } catch (ArrayIndexOutOfBoundsException e){
+        return false;
+    }
         return true;
     }
 
@@ -309,12 +319,15 @@ public class Utils {
 
         int row = arrayCoords[0];
         int col = arrayCoords[1];
-
+        try{
         for (int i = 1; i < length; i++) {
             if (!grid.getCell(row + i, col).getShipPlaceable()) {
                 return false;
             }
         }
+    }catch (ArrayIndexOutOfBoundsException e){
+        return false;
+    }
         return true;
     }
 }
