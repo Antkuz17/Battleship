@@ -48,6 +48,7 @@ public class Game {
             humanPlayer.shoot(AIPlayer.myGrid, humanPlayer.shotsGrid);
 
             // AI shooting
+            AIPlayer.shoot(humanPlayer.myGrid, AIPlayer.shotsGrid);
             
 
             
