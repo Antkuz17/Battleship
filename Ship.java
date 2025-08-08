@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Ship {
 
     private int length;
-    private Coord initPos; // where the ship start
+
     private boolean isSunk;
     private String vector; // From the initial pose does the ship point left right up down
 
@@ -14,7 +14,6 @@ public class Ship {
 
     public Ship(int length) {
         this.length = length;
-        this.initPos = null;
         this.isSunk = false;
         this.vector = "down";
     }

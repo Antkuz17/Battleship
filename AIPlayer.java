@@ -101,22 +101,22 @@ public class AIPlayer extends Player {
                 switch (direction) {
                     case "up":
                         if (lastHitCoords[0] > 0) {
-                            coord = Coord.numToLetter(lastHitCoords[0] - 1) + (lastHitCoords[1] + 1);
+                            coord = Utils.numToLetter(lastHitCoords[0] - 1) + (lastHitCoords[1] + 1);
                         }
                         break;
                     case "down":
                         if (lastHitCoords[0] < 9) {
-                            coord = Coord.numToLetter(lastHitCoords[0] + 1) + (lastHitCoords[1] + 1);
+                            coord = Utils.numToLetter(lastHitCoords[0] + 1) + (lastHitCoords[1] + 1);
                         }
                         break;
                     case "left":
                         if (lastHitCoords[1] > 0) {
-                            coord = Coord.numToLetter(lastHitCoords[0]) + lastHitCoords[1];
+                            coord = Utils.numToLetter(lastHitCoords[0]) + lastHitCoords[1];
                         }
                         break;
                     case "right":
                         if (lastHitCoords[1] < 9) {
-                            coord = Coord.numToLetter(lastHitCoords[0]) + (lastHitCoords[1] + 2);
+                            coord = Utils.numToLetter(lastHitCoords[0]) + (lastHitCoords[1] + 2);
                         }
                         break;
                 }
@@ -137,7 +137,7 @@ public class AIPlayer extends Player {
 
                 // Try up
                 if (poiCoords[0] > 0) {
-                    String testCoord = Coord.numToLetter(poiCoords[0] - 1) + (poiCoords[1] + 1);
+                    String testCoord = Utils.numToLetter(poiCoords[0] - 1) + (poiCoords[1] + 1);
                     int[] testArr = Utils.translation(testCoord);
                     if (!shotsGrid.getCell(testArr[0], testArr[1]).getWasShot()) {
                         coord = testCoord;
@@ -146,7 +146,7 @@ public class AIPlayer extends Player {
 
                 // Try down if up didn't work
                 if (coord == null && poiCoords[0] < 9) {
-                    String testCoord = Coord.numToLetter(poiCoords[0] + 1) + (poiCoords[1] + 1);
+                    String testCoord = Utils.numToLetter(poiCoords[0] + 1) + (poiCoords[1] + 1);
                     int[] testArr = Utils.translation(testCoord);
                     if (!shotsGrid.getCell(testArr[0], testArr[1]).getWasShot()) {
                         coord = testCoord;
@@ -155,7 +155,7 @@ public class AIPlayer extends Player {
 
                 // Try left if up and down didn't work
                 if (coord == null && poiCoords[1] > 0) {
-                    String testCoord = Coord.numToLetter(poiCoords[0]) + poiCoords[1];
+                    String testCoord = Utils.numToLetter(poiCoords[0]) + poiCoords[1];
                     int[] testArr = Utils.translation(testCoord);
                     if (!shotsGrid.getCell(testArr[0], testArr[1]).getWasShot()) {
                         coord = testCoord;
@@ -164,7 +164,7 @@ public class AIPlayer extends Player {
 
                 // Try right if all others failed
                 if (coord == null && poiCoords[1] < 9) {
-                    String testCoord = Coord.numToLetter(poiCoords[0]) + (poiCoords[1] + 2);
+                    String testCoord = Utils.numToLetter(poiCoords[0]) + (poiCoords[1] + 2);
                     int[] testArr = Utils.translation(testCoord);
                     if (!shotsGrid.getCell(testArr[0], testArr[1]).getWasShot()) {
                         coord = testCoord;
@@ -194,7 +194,7 @@ public class AIPlayer extends Player {
                         switch (oppositeDir) {
                             case "up":
                                 if (poiCoords[0] > 0) {
-                                    String testCoord = Coord.numToLetter(poiCoords[0] - 1) + (poiCoords[1] + 1);
+                                    String testCoord = Utils.numToLetter(poiCoords[0] - 1) + (poiCoords[1] + 1);
                                     int[] testArr = Utils.translation(testCoord);
                                     if (!shotsGrid.getCell(testArr[0], testArr[1]).getWasShot()) {
                                         coord = testCoord;
@@ -205,7 +205,7 @@ public class AIPlayer extends Player {
                                 break;
                             case "down":
                                 if (poiCoords[0] < 9) {
-                                    String testCoord = Coord.numToLetter(poiCoords[0] + 1) + (poiCoords[1] + 1);
+                                    String testCoord = Utils.numToLetter(poiCoords[0] + 1) + (poiCoords[1] + 1);
                                     int[] testArr = Utils.translation(testCoord);
                                     if (!shotsGrid.getCell(testArr[0], testArr[1]).getWasShot()) {
                                         coord = testCoord;
@@ -216,7 +216,7 @@ public class AIPlayer extends Player {
                                 break;
                             case "left":
                                 if (poiCoords[1] > 0) {
-                                    String testCoord = Coord.numToLetter(poiCoords[0]) + poiCoords[1];
+                                    String testCoord = Utils.numToLetter(poiCoords[0]) + poiCoords[1];
                                     int[] testArr = Utils.translation(testCoord);
                                     if (!shotsGrid.getCell(testArr[0], testArr[1]).getWasShot()) {
                                         coord = testCoord;
@@ -227,7 +227,7 @@ public class AIPlayer extends Player {
                                 break;
                             case "right":
                                 if (poiCoords[1] < 9) {
-                                    String testCoord = Coord.numToLetter(poiCoords[0]) + (poiCoords[1] + 2);
+                                    String testCoord = Utils.numToLetter(poiCoords[0]) + (poiCoords[1] + 2);
                                     int[] testArr = Utils.translation(testCoord);
                                     if (!shotsGrid.getCell(testArr[0], testArr[1]).getWasShot()) {
                                         coord = testCoord;
