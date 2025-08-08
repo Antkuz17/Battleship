@@ -4,8 +4,10 @@ public class Ship {
 
     private int length;
 
-    private boolean isSunk;
+    public boolean isSunk;
     private String vector; // From the initial pose does the ship point left right up down
+    private String initPos; // The start position around which the ship is rotated
+    private int[] arrCoords;
 
     // private boolean againstRightWall = false;
     // private boolean againstLeftWall = false;
@@ -54,8 +56,11 @@ public class Ship {
             potentialPos = input.nextLine();
             coords = Utils.translation(potentialPos);
         }
-        // Number of possible positions that the ship can take
-        int possiblePoses = Utils.posFits(grid, length, potentialPos);
+
+        // Setting global variable for initPos
+        initPos = potentialPos;
+        arrCoords = coords;
+
 
         // Setting the start coord as having a ship and not being able to place ships on
         // it
@@ -103,6 +108,7 @@ public class Ship {
                             }
                         }
                     }
+                    vector = "right";
                     System.out.println("Grid with invalid squares");
                     grid.drawGrid();
                     break;
@@ -148,6 +154,7 @@ public class Ship {
                             }
                         }
                     }
+                    vector = "down";
                     System.out.println("Grid with invalid squares");
                     grid.drawGrid();
                     break;
@@ -189,6 +196,7 @@ public class Ship {
                             }
                         }
                     }
+                    vector = "left";
                     System.out.println("Grid with invalid squares");
                     grid.drawGrid();
                     break;
@@ -230,6 +238,7 @@ public class Ship {
                             }
                         }
                     }
+                    vector = "up";
                     System.out.println("Grid with invalid squares");
                     grid.drawGrid();
                     break;
@@ -298,7 +307,7 @@ public class Ship {
                             }
                         }
                     }
-
+                    vector = "right";
                     break;
                 }
             }
@@ -327,7 +336,7 @@ public class Ship {
                             }
                         }
                     }
-
+                    vector = "down";
                     break;
                 }
             }
@@ -356,7 +365,7 @@ public class Ship {
                             }
                         }
                     }
-
+                    vector = "left";
                     break;
                 }
             }
@@ -385,12 +394,76 @@ public class Ship {
                             }
                         }
                     }
-
+                    vector = "up";
                     break;
                 }
             }
         }
 
+    }
+
+    /**
+     * Returns whether this ship is completely sunk
+     * A ship is sunk when all of its positions on the grid have been shot
+     * 
+     * @param grid The grid to check (should be the grid where this ship was placed)
+     * @return True if all parts of the ship have been hit, false otherwise
+     */
+    public Boolean getIsSunk(Grid grid) {
+        if (initPos == null) {
+            return false; // Ship was never placed
+        }
+
+        int startRow = arrCoords[0];
+        int startCol = arrCoords[1];
+
+        // Check if the starting position has been shot
+        if (!grid.getCell(startRow, startCol).getWasShot()) {
+            return false; // Starting position not hit, ship not sunk
+        }
+
+        // Check all other positions of the ship based on its direction
+        switch (vector) {
+            case "right":
+                for (int i = 1; i < length; i++) {
+                    if (!grid.getCell(startRow, startCol + i).getWasShot()) {
+                        return false; // Found an unhit part
+                    }
+                }
+                break;
+
+            case "down":
+                for (int i = 1; i < length; i++) {
+                    if (!grid.getCell(startRow + i, startCol).getWasShot()) {
+                        return false; // Found an unhit part
+                    }
+                }
+                break;
+
+            case "left":
+                for (int i = 1; i < length; i++) {
+                    if (!grid.getCell(startRow, startCol - i).getWasShot()) {
+                        return false; // Found an unhit part
+                    }
+                }
+                break;
+
+            case "up":
+                for (int i = 1; i < length; i++) {
+                    if (!grid.getCell(startRow - i, startCol).getWasShot()) {
+                        return false; // Found an unhit part
+                    }
+                }
+                break;
+
+            default:
+                // If vector is not set properly, assume ship is not sunk
+                return false;
+        }
+
+        // If we get here, all parts of the ship have been hit
+        isSunk = true;
+        return true;
     }
 
 }

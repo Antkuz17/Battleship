@@ -302,7 +302,8 @@ public class Utils {
         return true;
     }
 
-
+    // Gets user input for a coordinate
+    // Used so that only one scanner exists accross all classes to avoid input issues
     public static String getCoord(){
         return input.nextLine();
     }

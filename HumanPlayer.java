@@ -1,7 +1,5 @@
 public class HumanPlayer extends Player {
 
-    private boolean aiShipSunk = false; // True if all ships are sunk
-    private int numHits = 0; // Number of its the user has made
     /**
      * Responsible for handling the player shooting.
      * Works by having the player enter a coordinate and then it checks that the given coord
@@ -28,15 +26,10 @@ public class HumanPlayer extends Player {
         shotsGrid.getCell(arrCoords[0], arrCoords[1]).setWasShot(true);
         enemyGrid.getCell(arrCoords[0], arrCoords[1]).setWasShot(true);
 
-        // If there was a hit, add to the hits counter and if there are 20 hits all the ships are sunk
+        // If there was a hit, print to terminal
         if(enemyGrid.getCell(arrCoords[0], arrCoords[1]).gethasShip()){
-            numHits++;
-            if(numHits == 20){
-                aiShipSunk = true;
-                System.out.println("All the AI's ships are sunk, you win");
-            }
+            System.out.println("Thats a hit");
+            shotsGrid.getCell(arrCoords[0], arrCoords[1]).setHasShip(true); // Set so that when displaying the grid, it shows a H and not a M
         }
-
-
     }
 }
